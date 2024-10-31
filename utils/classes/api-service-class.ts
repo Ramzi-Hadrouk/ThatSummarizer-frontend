@@ -12,21 +12,47 @@ class ApiService {
     return qs.stringify(queryObj);
   }
 
-  // Fetch data from the API, optionally using caching
-  async getData(path: string, queryObj: object = {}, cache: boolean = true) {
-    
-    const url = new URL(path, this.baseUrl);
+  private isQueryObjectValide(queryObj: object = {}): boolean {
+    return Object.keys(queryObj).length > 0;
+  }
 
-    if (Object.keys(queryObj).length > 0) {
+
+  // Fetch data from the API, optionally using caching
+  private async fetchData(url: URL, useCache: boolean): Promise<Response> {
+
+    const response = await fetch(url.href, {
+      cache: useCache ? 'default' : 'no-store',
+    });
+
+    return response;
+
+  }
+
+
+  // if the queryObj is currect return the complete url else return baseUrl
+  private generateURL(path: string, queryObj: object = {}) {
+     const url = new URL(path, this.baseUrl);
+
+    if (this.isQueryObjectValide(queryObj)) {
       url.search = this.generateQuery(queryObj);
     }
 
+    return url
+  }
+
+
+
+  async getData(path: string, queryObj: object = {}, cache: boolean = true) {
+
+    const url = this.generateURL(path, queryObj);
+
+
     try {
       console.log('Fetching data from:', url.href)
-      const response = cache
-        ? await fetch(url.href)
-        : await fetch(url.href, { cache: 'no-store' });
-      
+
+      const response = await this.fetchData(url, cache);
+
+
       console.log('Response status:', response.status);
 
       if (!response.ok) {
@@ -34,8 +60,9 @@ class ApiService {
       }
 
       const data = await response.json();
-      console.dir( 'Fetched data: ' , data)
+      console.dir('Fetched data: ', data)
       return data;
+
     } catch (error) {
       console.error(`Error fetching data from ${url.href}:`, error);
       throw error;

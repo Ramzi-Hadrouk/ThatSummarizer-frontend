@@ -1,0 +1,30 @@
+{populate:{
+  header:{
+    populate:{
+      logo:{
+        populate:true
+      }
+    
+     ,
+      button:{
+        populate:true
+      }
+    }
+    
+    
+  }
+  ,
+  footer:{
+  populate:{
+   logo:{
+        populate:true
+      },
+       social_Links:{
+        populate:true
+      },
+    }
+     
+  }
+ 
+ }
+}
