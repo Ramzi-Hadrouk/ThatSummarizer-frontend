@@ -51,3 +51,9 @@ interface ImageAttributes {
     image: Image;
     link: Link[];
   }
+
+  export interface Footer{
+    id:number ;
+    logo:Link;
+    button : Link;
+  }

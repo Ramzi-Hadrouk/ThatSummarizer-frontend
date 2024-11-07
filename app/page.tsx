@@ -1,8 +1,8 @@
 
 import ApiService from "@/utils/classes/api-service-class";
 import  blockRenderer  from "@/utils/functions/block-renderer"; // Correct import path
-import { Block } from "@/utils/interfaces/types";
-import { homePageQuery } from "@/utils/objects/query-objects";
+import type { Block } from "@/utils/interfaces/types";
+import  { homePageQuery } from "@/utils/objects/query-objects";
 
 export default async function Home() {
 

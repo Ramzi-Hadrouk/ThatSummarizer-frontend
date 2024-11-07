@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
-  *{outline: 0.5px  solid red;}
+  /**{outline: 0.5px  solid rgb(232, 232, 232);}*/
   :root {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { HeroSection } from "@/utils/interfaces/types";
+import  type { HeroSection } from "@/utils/interfaces/types";
 
  function   HeroSection({data}: { data: HeroSection } ) { 
 
@@ -10,7 +10,7 @@ import { HeroSection } from "@/utils/interfaces/types";
     const imageURL = data.image?.data?.attributes?.url || "default-image-url";
 
      return (
-        <div className="items-center w-10/12 grid-cols-2 mx-auto  bg-background my-5 rounded-3xl overflow-x-hidden lg:grid md:py-14 lg:py-24 xl:py-14 lg:mt-3 xl:mt-5" data-aos="fade-right" data-aos-duration="800">
+        <div className="items-center w-10/12 grid-cols-2 mx-auto   my-5 rounded-3xl overflow-x-hidden lg:grid md:py-14 lg:py-24 xl:py-14 lg:mt-3 xl:mt-5" data-aos="fade-right" data-aos-duration="800">
             <div className="pr-2 md:mb-14 py-14 md:py-0">
                 <h1 className="text-xl md:text-2xl xl:text-3xl  font-semibold  text-foreground  lg:text-3xl">
               { heading}
