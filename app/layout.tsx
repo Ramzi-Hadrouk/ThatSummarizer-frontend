@@ -32,7 +32,7 @@ export default  async function RootLayout({ children,}: Readonly<{ children: Rea
   console.log(data.data.attributes.header)
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased  `} >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased `} >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

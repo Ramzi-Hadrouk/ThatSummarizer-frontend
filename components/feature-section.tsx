@@ -27,7 +27,7 @@ function getIcon(name: string) {
 //---------Component Function :
 function FeatureSection({ data }: { data: FeaturesSection }) {
     return (
-        <div className=" grid my-5   md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  border-t-2 ">
+        <div className=" grid my-5  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  border-t-0 border-card ">
             {data?.features?.map((feature: FeatureItem) => (
                 <Card key={feature.id}>
                     <CardHeader>

@@ -9,7 +9,7 @@ async function Header({ data }: { data: Footer }) {
     //------------ queryObject of fetching main page data
 
     return (
-        <header className=' w-[100%]  sticky shadow-card-foreground shadow-sm z-10 top-0 grid grid-flow-col px-2 py-1  gap-3 bg-background'>
+        <header className='  w-[100%]  bg-card sticky shadow-card-foreground shadow-sm z-10 top-0 grid grid-flow-col px-2 py-1  gap-3 '>
 
             <Link className="  justify-self-start w-fit font-medium py-1" href={data.logo.url}>{data.logo.name}</Link>
 
