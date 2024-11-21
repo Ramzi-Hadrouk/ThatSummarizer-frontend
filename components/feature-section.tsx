@@ -27,11 +27,11 @@ function getIcon(name: string) {
 //---------Component Function :
 function FeatureSection({ data }: { data: FeaturesSection }) {
     return (
-        <div className=" grid my-5  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  border-t-0 border-card ">
+        <div className=" grid my-5  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  ">
             {data?.features?.map((feature: FeatureItem) => (
-                <Card key={feature.id}>
+                <Card key={feature.id} className=" border-l-2 border-t-2 border-muted">
                     <CardHeader>
-                        <CardTitle className=" grid  grid-flow-col justify-start  ">
+                        <CardTitle className=" grid  grid-flow-col justify-start   ">
 
                             <span className=" mx-2 inline-block">{getIcon(feature.icon)}</span>
                             <span className=" mx-2 inline-block">{feature.heading.split(' ')[0]}</span>

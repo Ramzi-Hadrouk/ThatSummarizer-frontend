@@ -4,7 +4,12 @@
 @layer base {
   /**{outline: 0.5px  solid rgb(232, 232, 232);}*/
   :root {
-    --background:linear-gradient(to top, #dfe9f3 0%, white 100%);
+    /*--background:linear-gradient(to top, #dfe9f3 0%, white 100%);*/
+    --background: #F2F2F2;
+    --background: linear-gradient(
+      to left,
+      #F2F2F2 ,#D7FFFE
+    );
    /*--background: 0 0% 100%;*/
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
@@ -33,9 +38,14 @@
   }
 
  .dark{
-    --background:linear-gradient(90deg, rgba(22,21,33,1) 0%, rgba(11,15,40,1) 48%, rgba(0,12,14,1) 100%);
+   /* --background:linear-gradient(90deg, rgba(22,21,33,1) 0%, rgba(11,15,40,1) 48%, rgba(0,12,14,1) 100%);*/
+   --background: #000000;
+  --background: linear-gradient(
+    to right,
+    #000000,#111010
+  );
     --foreground: 60 9.1% 97.8%;
-    --card:236 100% 3%;
+    --card:0 0 0 ;
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
@@ -43,7 +53,7 @@
     --primary-foreground: 26 83.3% 14.1%;
     --secondary: 12 6.5% 15.1%;
     --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
+    --muted: 12 4.2% 23.3%;
     --muted-foreground: 24 5.4% 63.9%;
     --accent: 12 6.5% 15.1%;
     --accent-foreground: 60 9.1% 97.8%;
@@ -67,6 +77,6 @@
  
 @layer utilities {
   .shadow-foreground {
-    filter: drop-shadow(4px 20px 9px hsl(var(--background) / 0.4));
+    filter: drop-shadow(40px 20px 9px hsl(var(--background) /0.4));
   }
 }
