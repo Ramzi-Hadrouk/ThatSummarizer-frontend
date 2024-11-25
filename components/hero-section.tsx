@@ -24,7 +24,7 @@ import  type { HeroSection } from "@/utils/interfaces/types";
             </div>
 
             <div className="pb-10   overflow-hidden md:p-10 lg:p-0 sm:pb-0 rounded-lg">
-                <img id="heroImg1" className="transition-all w-[500px]   drop-shadow-custom h-[500px] object-contain duration-300 ease-in-out hover:scale-105 lg:w-full sm:mx-auto sm:w-4/6 sm:pb-12 lg:pb-0" 
+                <img id="heroImg1" className="transition-all w-[500px] h-[500px] object-contain duration-300 ease-in-out hover:scale-105 lg:w-full sm:mx-auto sm:w-4/6 sm:pb-12 lg:pb-0" 
                 src={process.env.BASE_URL+imageURL} 
                 alt="Awesome hero page image" 
                   />

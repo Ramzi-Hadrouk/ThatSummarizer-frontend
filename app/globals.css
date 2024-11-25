@@ -5,11 +5,8 @@
   /**{outline: 0.5px  solid rgb(232, 232, 232);}*/
   :root {
     /*--background:linear-gradient(to top, #dfe9f3 0%, white 100%);*/
-    --background: #F2F2F2;
-    --background: linear-gradient(
-      to left,
-      #F2F2F2 ,#D7FFFE
-    );
+    --background:#f7fae2;
+   
    /*--background: 0 0% 100%;*/
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
@@ -74,9 +71,3 @@
   }
 }
 
- 
-@layer utilities {
-  .shadow-foreground {
-    filter: drop-shadow(40px 20px 9px hsl(var(--background) /0.4));
-  }
-}

@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { SquareChevronLeft } from 'lucide-react';
+import { Home } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -14,14 +14,15 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 
 
-function SignIn() {
+function Login() {
     return (
         <div className=''>
             <Card className="w-[500px]  border-[1px]">
                 <CardHeader>
                     <CardTitle className="grid gap-4">
-                    <Link href={'/'}  className="text-md font-normal">    <SquareChevronLeft /> </Link>
-                        SignIn
+                    <Link href={'/'} className="text-md text-muted-foreground w-fit  hover:text-foreground">    <Home/> </Link>
+
+                        Login
                     </CardTitle>
                     <CardDescription>Enter your details to sign into your account.</CardDescription>
                 </CardHeader>
@@ -40,21 +41,18 @@ function SignIn() {
                                 <Label htmlFor="name">Password</Label>
                                 <Input type="password" id="name" placeholder="Password" />
                             </div>
+                            <Button type="submit" className="w-fit px-8 justify-self-center">Login</Button>
                         </div>
                     </form>
                     {/*----------end Form------------- */}
 
                 </CardContent>
                 <CardFooter className="grid    gap-y-5" >
-                    <div className="grid grid-flow-col  w-full justify-evenly">
-                        
-                        
-                        <Button>SignIn</Button>
-                    </div>
+                  
 
                     <p className="text-center">
                         Dont have an Account ?
-                        <Link href={'/signup'} className="text- underline px-5">SignUp</Link>
+                        <Link href={'/sign-up'} className="text- underline px-5">SignUp</Link>
                     </p>
                 </CardFooter>
             </Card>
@@ -63,4 +61,4 @@ function SignIn() {
     )
 }
 
-export default SignIn
+export default Login ;

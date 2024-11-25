@@ -29,7 +29,7 @@ function FeatureSection({ data }: { data: FeaturesSection }) {
     return (
         <div className=" grid my-5  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  ">
             {data?.features?.map((feature: FeatureItem) => (
-                <Card key={feature.id} className=" border-l-2 border-t-2 border-muted">
+                <Card key={feature.id} className="  shadow-lg border  ">
                     <CardHeader>
                         <CardTitle className=" grid  grid-flow-col justify-start   ">
 
