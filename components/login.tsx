@@ -17,7 +17,7 @@ import Link from "next/link"
 function Login() {
     return (
         <div className=''>
-            <Card className="w-[500px]  border-[1px]">
+            <Card className="md:w-[500px]  border-[1px]">
                 <CardHeader>
                     <CardTitle className="grid gap-4">
                     <Link href={'/'} className="text-md text-muted-foreground w-fit  hover:text-foreground">    <Home/> </Link>

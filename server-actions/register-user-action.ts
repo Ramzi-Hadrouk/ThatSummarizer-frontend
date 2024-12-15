@@ -1,5 +1,5 @@
 "use server";
-
+import AuthService from "@/utils/classes/api-auth-service-class";
 import signUpSchema from "@/utils/objects/sign-up-validation";
 import type { SignUpFields } from "@/utils/interfaces/types"
 
@@ -10,28 +10,35 @@ export default async function registerUserAction(prevState: any, formData: FormD
     email: formData.get("email"),
     password: formData.get("password"),
   };
+  
+  
   const validationResult = signUpSchema.safeParse(fields);
+
+
 
   if (!validationResult.success) {
     return {
       ...prevState,
       data: fields,
-      errors: validationResult.error.flatten().fieldErrors,
-      message: 'Filed To Register',
+      validation_errors: validationResult.error.flatten().fieldErrors,
+      is_registered:{state:"no" , error :null}
 
     }
 
   }
 
-  return {
+ 
+   const auth=new AuthService() ;
+  const state =await auth.signup(fields) ;
+ 
+   return {
     ...prevState,
     data: {
       username: formData.get("username"),
       email: formData.get("email"),
     },
-    errors: null,
-    message: 'Successfully Registered',
-
+    validation_errors: null,
+    is_registered:state
   };
 
 }

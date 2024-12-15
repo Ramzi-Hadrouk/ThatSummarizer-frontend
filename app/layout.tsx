@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import ApiService from "@/utils/classes/api-service-class";
 import { globalSections } from '@/utils/objects/query-objects';
+import { Toaster } from "@/components/ui/toaster"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -42,6 +43,8 @@ export default  async function RootLayout({ children,}: Readonly<{ children: Rea
         
           <Header  data={data?.data?.attributes?.header}/>
           {children}
+          <Toaster />
+
         </ThemeProvider>
       </body>
     </html>
