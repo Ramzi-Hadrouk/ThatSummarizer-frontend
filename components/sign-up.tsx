@@ -12,9 +12,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { useFormState } from "react-dom";
 import registerUserAction from "@/server-actions/register-user-action";
 
+
+
 function SignUp() {
+    let INISIAL_STATE={
+        data:null ,
+        errors:null ,
+        message : null ,
+    }
+
+    const [formState, formAction]=useFormState(registerUserAction,INISIAL_STATE)
+    console.log(formState)
     return (
         <div className=''>
             <Card className="w-[500px]  border">
@@ -28,7 +39,7 @@ function SignUp() {
                 <CardContent>
 
                     {/*----------Form------------- */}
-                    <form action={registerUserAction}>
+                    <form action={formAction}>
                         <div className="grid w-full items-center gap-4">
                             {/*-- Username input --*/}
                             <div className="flex flex-col space-y-1.5">
@@ -39,6 +50,7 @@ function SignUp() {
                                     placeholder="Username"
                                     name="username"
                                 />
+                                <span className="text-red-500 text-sm">{formState.errors?.username? formState.errors?.username[0] :null }</span>
                             </div>
                             {/*-- Email input --*/}
                             <div className="flex flex-col space-y-1.5">
@@ -49,6 +61,7 @@ function SignUp() {
                                     placeholder="Email"
                                     name="email"
                                 />
+                                <span className="text-red-500 text-sm">{formState.errors?.email? formState.errors?.email[0] :null }</span>
                             </div>
                             {/*-- Password input --*/}
                             <div className="flex flex-col space-y-1.5">
@@ -59,9 +72,11 @@ function SignUp() {
                                     placeholder="Password"
                                     name="password"
                                 />
+                                <span className="text-red-500 text-sm">{formState.errors?.password? formState.errors?.password[0] :null }</span>
+                                
                             </div>
                        
-                            <Button type="submit" className="w-fit px-8 justify-self-center">SignIn</Button>
+                            <Button type="submit" className="w-fit px-8 justify-self-center">SignUp</Button>
                        
                         </div>
                 

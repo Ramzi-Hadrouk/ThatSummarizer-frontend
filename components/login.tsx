@@ -33,8 +33,8 @@ function Login() {
                         <div className="grid w-full items-center gap-4">
                             {/*-- Email input --*/}
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="name">Email</Label>
-                                <Input id="name" placeholder="Email" />
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" placeholder="Email" />
                             </div>
                             {/*-- Password input --*/}
                             <div className="flex flex-col space-y-1.5">
