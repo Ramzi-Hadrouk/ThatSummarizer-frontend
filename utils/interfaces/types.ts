@@ -64,3 +64,8 @@ export interface SignUpFields {
   email: FormDataEntryValue | null;
   password: FormDataEntryValue | null;
 }
+
+export interface LoginFields {
+  email: FormDataEntryValue | null;
+  password: FormDataEntryValue | null;
+}

@@ -30,7 +30,6 @@ export default  async function RootLayout({ children,}: Readonly<{ children: Rea
 
   const api = new ApiService();
   const data = await api.getData('/api/global', queryObject, false)
-  console.log(data.data.attributes.header)
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `} >

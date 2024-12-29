@@ -9,7 +9,7 @@ class ApiService {
   private token?: string;
 
   constructor() {
-    this.baseUrl = process.env.BASE_URL ;
+    this.baseUrl = process.env.BASE_URL||"http://localhost:1337" ;
     this.token = process.env.TOKEN; // Initialize token from environment variable
   }
 
@@ -44,10 +44,8 @@ class ApiService {
     const url = this.generateURL(path, queryObj);
 
     try {
-      // console.log('Fetching data from:', url);
       return await this.fetchData(url, cache, withToken ? this.token : undefined);
     } catch (error) {
-      console.error(`Error fetching data from ${url}:`, error);
       throw error;
     }
   }

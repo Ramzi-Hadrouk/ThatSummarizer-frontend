@@ -17,11 +17,13 @@ import { useEffect } from 'react';
 
 import Link from "next/link"
 import { useFormState } from "react-dom";
-import registerUserAction from "@/server-actions/register-user-action";
+import registerUserAction from "@/auth-logic/register/register-action";
+
 
 
 
 function SignUp() {
+
     let INISIAL_STATE = {
         data: null,
         validation_errors: null,
@@ -32,12 +34,13 @@ function SignUp() {
 
     const [formState, formAction] = useFormState(registerUserAction, INISIAL_STATE)
 
+    //if there is an error return toast
     useEffect(() => {
 
         if (formState.is_registered?.state === "no" && formState.validation_errors===null) {
             toast({
                 variant: "destructive",
-                title: "Scheduled: Catch up ",
+                title: "Wrong ! ",
                 description: `${formState.is_registered.error?.error?.message}`,
                 action: (
                     <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
