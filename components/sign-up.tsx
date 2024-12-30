@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 
 import Link from "next/link"
 import { useFormState } from "react-dom";
-import registerUserAction from "@/auth-logic/register/register-action";
+import registerServerAction from "@/auth-logic/register/register-server-action";
 
 
 
@@ -32,7 +32,7 @@ function SignUp() {
 
     const { toast } = useToast()
 
-    const [formState, formAction] = useFormState(registerUserAction, INISIAL_STATE)
+    const [formState, formAction] = useFormState(registerServerAction, INISIAL_STATE)
 
     //if there is an error return toast
     useEffect(() => {

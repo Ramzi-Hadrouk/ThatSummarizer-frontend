@@ -1,9 +1,10 @@
+'use client'
 import React from 'react'
 import { Button } from './ui/button'
 import { ModeToggle } from './ui/modeToggle';
 import type { Footer } from '@/utils/interfaces/types';
 import Link from 'next/link';
-
+import loginLogoutButton from './login-logout-button';
 
 async function Header({ data }: { data: Footer }) {
     //------------ queryObject of fetching main page data
@@ -16,9 +17,12 @@ async function Header({ data }: { data: Footer }) {
             <div className="justify-self-end items-center justify-end  grid grid-flow-col gap-3">
                 <div className=" w-fit "> <ModeToggle /></div>
 
-                <Link  href={data.button.url}>
+               { /*<Link  href={data.button.url}>
                     <Button variant="outline"  className=''>{data.button.name}</Button>
-                </Link>
+                </Link>*/
+                }
+
+                <loginLogoutButton/> 
             </div>
 
         </header>

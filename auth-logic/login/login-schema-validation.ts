@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-const signUpSchema = z.object({
+const loginSchema = z.object({
 
-
+   
   email: z
     .string()
     .email("Invalid email address."),
@@ -15,4 +15,4 @@ const signUpSchema = z.object({
     .regex(/\d/, "Password must include at least one number.")
     .regex(/[@$!%*?&]/, "Password must include at least one special character."),
 });
-export default signUpSchema;
+export default loginSchema;

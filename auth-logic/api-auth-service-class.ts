@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import type { SignUpFields,LoginFields } from "../interfaces/types";
+import type { SignUpFields,LoginFields } from "../utils/interfaces/types";
 
 class AuthService {
   private baseUrl: string;
@@ -31,8 +31,8 @@ class AuthService {
       return this.user;
     }
 
-  //------------------ Login
-  async login(data:LoginFields):Promise<{ state: string; error: any }> {
+  //====================== Login===================
+  async PostloginData(data:LoginFields):Promise<{ state: string; error: any }> {
     try {
       const response = await axios.post(`${this.baseUrl}/api/auth/local`, {
         identifier: data.email, // Using `email` as the identifier
@@ -54,8 +54,8 @@ class AuthService {
   }
 
 
-  //------------------ Signup
-  async signup(data: SignUpFields): Promise<{ state: string; error: any }> {
+  //===================== Signup=====================
+  async postRegisterData(data: SignUpFields): Promise<{ state: string; error: any }> {
     try {
       const response = await axios.post(
         `${this.baseUrl}/api/auth/local/register`,

@@ -1,4 +1,4 @@
-"use client"
+ 'use client'
 import { Button } from "@/components/ui/button"
 import { Home } from 'lucide-react';
 import {
@@ -11,10 +11,41 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
+import { useEffect } from 'react';
+
 import Link from "next/link"
+import { useFormState } from "react-dom";
+import loginServerAction from "@/auth-logic/login/login-server-action ";
 
 
 function Login() {
+    let INISIAL_STATE = {
+        data: null,
+        validation_errors: null,
+        is_logged: { state: "", error: "" },
+    }
+
+    const { toast } = useToast()
+
+    const [formState, formAction] = useFormState(loginServerAction, INISIAL_STATE)
+
+    //if there is an error return toast
+    useEffect(() => {
+
+        if (formState.is_logged?.state === "no" && formState.validation_errors===null) {
+            toast({
+                variant: "destructive",
+                title: "Wrong ! ",
+                description: `${formState.is_logged.error?.error?.message}`,
+                action: (
+                    <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+                ),
+            })
+        }
+
+    }, [formState]);
     return (
         <div className=''>
             <Card className="md:w-[500px]  border-[1px]">
@@ -29,17 +60,31 @@ function Login() {
                 <CardContent>
 
                     {/*----------Form------------- */}
-                    <form>
+                    <form action={formAction}>
                         <div className="grid w-full items-center gap-4">
+                        
                             {/*-- Email input --*/}
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" placeholder="Email" />
+                                <Input
+                                    type="email"
+                                    id="email"
+                                    placeholder="Email"
+                                    name="email"
+                                />
+                                <span className="text-red-500 text-sm">{formState.validation_errors?.email ? formState.validation_errors?.email[0] : null}</span>
                             </div>
                             {/*-- Password input --*/}
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="name">Password</Label>
-                                <Input type="password" id="name" placeholder="Password" />
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    type="txt"
+                                    id="password"
+                                    placeholder="Password"
+                                    name="password"
+                                />
+                                <span className="text-red-500 text-sm">{formState.validation_errors?.password ? formState.validation_errors?.password[0] : null}</span>
+
                             </div>
                             <Button type="submit" className="w-fit px-8 justify-self-center">Login</Button>
                         </div>
