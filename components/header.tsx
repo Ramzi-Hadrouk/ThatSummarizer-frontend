@@ -4,7 +4,7 @@ import { Button } from './ui/button'
 import { ModeToggle } from './ui/modeToggle';
 import type { Footer } from '@/utils/interfaces/types';
 import Link from 'next/link';
-import loginLogoutButton from './login-logout-button';
+import LoginLogoutButton from './login-logout-button';
 
 async function Header({ data }: { data: Footer }) {
     //------------ queryObject of fetching main page data
@@ -22,7 +22,7 @@ async function Header({ data }: { data: Footer }) {
                 </Link>*/
                 }
 
-                <loginLogoutButton/> 
+                <LoginLogoutButton/>
             </div>
 
         </header>

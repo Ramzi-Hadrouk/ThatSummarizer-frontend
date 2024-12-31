@@ -1,42 +1,94 @@
-'use client '
-import { cookies } from 'next/headers'
-import React, { useState, useEffect } from 'react';
-
+'use client'
+import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
-import { Button } from './ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
-function loginLogoutButton() {
-    const [jwt, setJwt] = useState<string | undefined>(cookies().get('jwt')?.value);
+import { Button } from "@/components/ui/button";
 
-    useEffect(() => {
-        const handleCookieChange = () => {
-            const newJwt = cookies().get('jwt')?.value;
-            if (newJwt !== jwt) {
-                setJwt(newJwt);
-            }
-        };
+export default function LoginLogoutButton() {
+  const [isLoggedIn, setIsLoggedIn] = useState((Cookies.get('jwt')?.length ?? 0) > 3);
 
-        // Custom event to track cookie changes
-        const intervalId = setInterval(handleCookieChange, 1000);
+  const handleLogout = () => {
+    Cookies.remove('jwt');  
+    setIsLoggedIn(false);  
+    console.log('checkLoginStatus :  False');
 
-        return () => clearInterval(intervalId); // Cleanup interval on unmount
-    }, [jwt]);
+  };
 
-    return (
-        <>
-            {!jwt ? (
-                <Link href="/login">
-                    <Button variant="outline">Login</Button>
-                </Link>
-            ) : (
-                <Link href="/">
-                    <Button variant="outline">Logout</Button>
-                </Link>
-            )}
-        </>
-    )
+  const updateLoginState = () => {
+    const jwt = Cookies.get('jwt'); 
+
+    if (jwt !== undefined) {
+      if (jwt.length > 3) {
+        setIsLoggedIn(true);
+        console.log('checkLoginStatus :  True');
+      }
+    }
+     else {
+      setIsLoggedIn(false);
+      console.log('checkLoginStatus :  False');
+    }
+  };
+
+  useEffect(() => {
+     updateLoginState();
+  });
+
+  useEffect(() => {
+     updateLoginState();
+  }), [];
 
 
+
+  return (
+    < >
+
+      {
+      !isLoggedIn ? 
+      ( 
+        <Link href="/login" className=" w-full  hover:border px-3 py-1 border  border-muted rounded-sm hover:border-primary  cursor-pointer" onClick={updateLoginState}>
+          Login
+        </Link>
+     
+    
+      ) : (
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild >
+            <Button variant="outline">Logout</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className='  bg-popover'>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to log out?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+              <Link href="/" className="            rounded-lg   cursor-pointer" onClick={handleLogout}>
+                <AlertDialogAction>
+                  Logout
+                </AlertDialogAction>
+              </Link>
+
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )
+      }
+    </ >
+  );
 }
-
-export default loginLogoutButton 

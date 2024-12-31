@@ -42,5 +42,8 @@ export default async function loginServerAction(prevState: any, formData: FormDa
   const token = auth.getToken() || "";
   cookies().set("jwt", token, cookieConfig);
 
+  
+   
+  
   redirect("/dashboard");
 }
