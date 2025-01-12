@@ -1,5 +1,5 @@
 const jwtCookieConfig = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
+  maxAge: 60 * 60 * 24 *1, // 1 day
   path: "/",
   domain: process.env.NODE_ENV === "production" ? process.env.HOST : undefined,
   httpOnly: false, // Allow access via JavaScript

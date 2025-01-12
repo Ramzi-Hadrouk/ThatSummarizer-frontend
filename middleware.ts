@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import isAuthenticated from './utils/functions/is-authenticated';
+import isAuthenticated from './auth-logic/is-authenticated';
 
 import {cookies} from 'next/headers'
 

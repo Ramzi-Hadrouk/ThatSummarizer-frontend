@@ -2,9 +2,9 @@ import React from 'react'
 
 function page() {
   return (
-    <div>
+    <main className='bg-red-50 '>
        dashboard
-    </div>
+    </main>
   )
 }
 
