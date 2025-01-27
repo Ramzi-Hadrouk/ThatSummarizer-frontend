@@ -69,3 +69,40 @@ export interface LoginFields {
   email: FormDataEntryValue | null;
   password: FormDataEntryValue | null;
 }
+
+// types.ts
+export interface UpdateProfileFields {
+  id: number;
+  username: string| null;
+  email: string| null;
+  firstname: string | null;
+  lastname: string | null;
+  bio: string | null;
+}
+
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  bio: string | null;
+  credit: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// In updateProfileServerAction.ts
+export type FormState = {
+  validation_errors?: {
+      username?: string[];
+      email?: string[];
+      first_name?: string[];
+      last_name?: string[];
+      bio?: string[];
+  } | null;
+  is_updated: {
+      state: "yes" | "no";
+      error?: Error | null;
+  };
+};
