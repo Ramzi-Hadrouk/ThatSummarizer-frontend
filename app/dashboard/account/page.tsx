@@ -4,9 +4,8 @@ async function  page() {
 
   return (
     <div className="p-5">
-    Account Page
      <UpdateProfileForme/>
-    {/* <ProfileImageForm data={userImage} className="col-span-2" /> */}
+  
   </div>
   )
 }
