@@ -22,6 +22,7 @@ export default async function updateProfileServerAction(prevState: any,formData:
   const validationResult = UpdateProfileSchema.safeParse(fields);
 
   if (!validationResult.success) {
+    console.error("not valid ")
     return {
       ...prevState,
       validation_errors: validationResult.error.flatten().fieldErrors,

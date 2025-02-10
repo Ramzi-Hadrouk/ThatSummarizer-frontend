@@ -93,16 +93,43 @@ export type User = {
 };
 
 // In updateProfileServerAction.ts
-export type FormState = {
-  validation_errors?: {
-      username?: string[];
-      email?: string[];
-      first_name?: string[];
-      last_name?: string[];
-      bio?: string[];
-  } | null;
+
+
+export interface FormState {
+  data: any;
+  validation_errors: Record<string, string[]> | null;
   is_updated: {
-      state: "yes" | "no";
-      error?: Error | null;
+    state: string;
+    error: any;
   };
-};
+}
+
+
+
+export interface UserInfo {
+  id: number;
+  username: string;
+  email: string;
+  firstname?: string;
+  lastname?: string;
+  bio?: string;
+  [key: string]: any;
+}
+
+export interface FieldConfig {
+  id: string;
+  label?: string;
+  name: string;
+  type: string;
+  readOnly?: boolean;
+  component: React.ComponentType<any>;
+  className?: string;
+  errorKey?: string;
+  hidden?: boolean;
+}
+
+export interface FormFieldProps {
+  field: FieldConfig;
+  userInfo: UserInfo | null;
+  validationErrors: Record<string, string[]> | null;
+}

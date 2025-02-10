@@ -132,7 +132,7 @@ function UpdateProfileForm() {
                                     className="bg-background"
                                 />
                                 <span className="text-red-500 text-sm">
-                                    {formState.validation_errors?.firstName?.[0]}
+                                    {formState.validation_errors?.firstname ? formState.validation_errors?.firstname[0] : null}
                                 </span>
                             </div>
 
@@ -143,11 +143,11 @@ function UpdateProfileForm() {
                                     id="lastname"
                                     placeholder="Lastname"
                                     name="lastname"
-                                    defaultValue={userInfo?.lastname || ''}
+                                    defaultValue={userInfo?.lastname  || ''}
                                     className="bg-background"
                                 />
                                 <span className="text-red-500 text-sm">
-                                    {formState.validation_errors?.lastName?.[0]}
+                                    {formState.validation_errors?.lastname ? formState.validation_errors?.lastname[0] : null}
                                 </span>
                             </div>
 
@@ -162,7 +162,7 @@ function UpdateProfileForm() {
                                     className="bg-background"
                                 />
                                 <span className="text-red-500 text-sm">
-                                    {formState.validation_errors?.bio?.[0]}
+                                    {formState.validation_errors?.bio ? formState.validation_errors?.bio[0] : null}
                                 </span>
                             </div>
                             <div className="lg:col-span-3 md:col-span-2 grid justify-center">

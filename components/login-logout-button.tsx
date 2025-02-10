@@ -20,8 +20,8 @@ export default function LoginLogoutButton() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const jwt = Cookies.get('jwt');
-    if (jwt && jwt.length > 3) {
+    const logged_state = Cookies.get('that_summarizer_logged_state');
+    if (logged_state && logged_state.length > 3) {
       setIsLoggedIn(true);
       console.log('checkLoginStatus : True');
     } else {
@@ -31,7 +31,7 @@ export default function LoginLogoutButton() {
   }); 
 
   const handleLogout = () => {
-    Cookies.remove('jwt');
+    Cookies.remove('that_summarizer_logged_state');
     setIsLoggedIn(false);
     console.log('checkLoginStatus : False');
   };

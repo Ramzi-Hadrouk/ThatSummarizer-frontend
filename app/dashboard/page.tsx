@@ -1,10 +1,15 @@
 import React from 'react'
+import VideoUrlForm from '@/components/video-url-form'
 
 function page() {
   return (
-    <main className='bg-red-50 '>
-       dashboard
-    </main>
+    
+      <div className='grid justify-center w-full bg-red-50 '>
+      <VideoUrlForm />
+      </div>
+    
+
+   
   )
 }
 

@@ -41,7 +41,12 @@ export default async function loginServerAction(prevState: any, formData: FormDa
   //==========================COOKIES Manipulation=====
   const token = auth.getToken() || "";
   cookies().set("jwt", token, cookieConfig);
+  cookies().set("that_summarizer_logged_state", 'true', {
+    maxAge: 60 * 60 * 24 *1, // 1 day
+    path: "/",
+    httpOnly: false, 
 
+  });
   
    
   
