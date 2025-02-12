@@ -1,19 +1,27 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="w-full">
-    <SidebarProvider>
-      <AppSidebar />
-      
-        <SidebarTrigger />
-       
-      
-    </SidebarProvider>
-    {children}
-    </main>
+    <div className=" min-h-screen  flex">
+      <SidebarProvider >
+        {/* Sidebar */}
+          <AppSidebar  /> 
+     
 
-  
-  )
+        {/* Main Content Wrapper */}
+        <div className="flex-1 flex flex-col">
+          {/* Sidebar Trigger (Sticky) */}
+          <div className="h-12 px-4 flex items-center sticky top-12 z-50 w-fit">
+            <SidebarTrigger  />
+          </div>
+
+          {/* Main Content */}
+          <div className="  flex-1 py-9 px-12">
+            {children}
+          </div>
+        </div>
+      </SidebarProvider>
+    </div>
+  );
 }

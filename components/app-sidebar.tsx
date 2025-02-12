@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 
@@ -44,12 +45,14 @@ const items = [
 export function AppSidebar() {
   return (
     
-    <Sidebar collapsible="icon"  className=" sticky  z-10">
+    <Sidebar collapsible="icon"  className=" top-10 z-0 fixed">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+
+
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild >
@@ -60,6 +63,7 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
