@@ -71,20 +71,23 @@ export enum LogType {
       : data;
   
     // Construct log output
-    console.log(`◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼ \n${envPrefix}`)
+    console.log(`\n \n◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼ \n${envPrefix}`)
     consoleMethod(`${header}`);
     if (message) consoleMethod(message);
     if (data !== undefined) consoleMethod(`\n Data:`, formattedData);
-    console.log(`◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼  \n`)
+    console.log(`◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼  \n \n`)
   }
   
   // Usage examples:
+  
   // print({
   //   location: 'summary-route',
   //   type: LogType.Error,
   //   mss: 'Failed to process request',
   //   data: { error: 'Timeout' },
   // });
+
+  //print({location: 'summary-route',type:LogType.Information ,mss: 'received data:',data:requestData});
   
   // Configure logger (optional)
   // configureLogger({

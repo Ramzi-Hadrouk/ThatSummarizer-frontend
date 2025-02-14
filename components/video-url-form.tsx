@@ -1,5 +1,5 @@
 "use client"
-
+import { LogType, print } from "@/utils/functions/print";
 import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,12 @@ export default function VideoUrlForm() {
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
 
+    //=================================
+
     const handleSubmit = useCallback(
         async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            
             if (!videoUrl) {
                 toast({
                     title: "Error",
@@ -22,39 +25,59 @@ export default function VideoUrlForm() {
                 });
                 return;
             }
-
+    
             setLoading(true);
-
+    
             try {
-                // Extract videoId from the video URL
-                const videoId = new URL(videoUrl).searchParams.get("v");
-                if (!videoId) {
-                    toast({
-                        title: "Error",
-                        description: "Invalid YouTube URL",
-                        variant: "destructive",
-                    });
-                    return;
+                let videoId: string | null = null;
+    
+                // Extract videoId from different YouTube URL formats
+                try {
+                    const urlObj = new URL(videoUrl);
+                    if (urlObj.hostname.includes("youtube.com")) {
+                        videoId = urlObj.searchParams.get("v");
+                    } else if (urlObj.hostname.includes("youtu.be")) {
+                        videoId = urlObj.pathname.substring(1);
+                    }
+                } catch (urlError) {
+                    throw new Error("Invalid URL format");
                 }
-
+    
+                if (!videoId) {
+                    throw new Error("Invalid YouTube URL");
+                }
+    
                 const result = await generateSummaryService(videoId);
                 if (result.error) {
-                    toast({
-                        title: "Error",
-                        description: result.error.message,
-                        variant: "destructive",
-                    });
-                } else {
-                    toast({
-                        title: "Summary Created",
-                        description: "Summary generated successfully!",
-                    });
+                    throw new Error(result.error.message);
                 }
+    
+                toast({
+                    title: "Summary Created",
+                    description: "Summary generated successfully!",
+                    variant: "success",
+                });
+    
+                print({
+                    location: "video-url-form",
+                    type: LogType.Success,
+                    mss: "Summary generated successfully",
+                    data: result,
+                });
             } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+                
                 toast({
                     title: "Error",
-                    description: "An unexpected error occurred.",
+                    description: errorMessage,
                     variant: "destructive",
+                });
+    
+                print({
+                    location: "video-url-form",
+                    type: LogType.Error,
+                    mss: "Failed to generate summary",
+                    data: errorMessage,
                 });
             } finally {
                 setLoading(false);
@@ -62,19 +85,22 @@ export default function VideoUrlForm() {
         },
         [videoUrl, toast]
     );
+    
+
+    //=================================
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="flex w-screen max-w-sm items-center space-x-2">
+            <div className="flex w-screen max-w-sm items-center space-x-2  shadow-white">
                 <Input
                     type="url"
                     placeholder="Enter video URL"
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
-                    className="flex-grow w-72"
+                    className="flex-grow w-72 "
                     disabled={loading}
                 />
-                <Button type="submit" variant="outline" className="bg-green-50 text-black" disabled={loading}>
+                <Button type="submit"   disabled={loading}>
                     {loading ? "Processing..." : "Create Summary"}
                 </Button>
             </div>
