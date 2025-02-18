@@ -1,66 +1,93 @@
 import { NextRequest } from "next/server";
 import { LogType, print } from "@/utils/functions/print";
+import enhancedFetch from "@/utils/functions/enhanced-fetch";
 
-export async function POST(req: NextRequest) {
+/**
+ * Creates a standardized error response.
+ *
+ * @param {string} message - The error message.
+ * @param {number} status - The HTTP status code.
+ * @param {string} [stack] - An optional error stack.
+ * @returns {Response} The formatted error response.
+ */
+function createErrorResponse(message: string, status: number, stack?: string): Response {
+  return new Response(
+    JSON.stringify({
+      error: {
+        message: message,
+        stack: stack ? stack : null
+      }
+    }),
+    {
+      status: status,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
+
+/**
+ * Handles the POST request to fetch a YouTube transcript.
+ *
+ * Expects the request JSON to contain a property `videoId`.
+ * Uses the enhancedFetch function to perform the request with a timeout.
+ *
+ * @param {NextRequest} req - The incoming request.
+ * @returns {Promise<Response>} A promise that resolves with the HTTP response.
+ */
+export async function POST(req: NextRequest): Promise<Response> {
   try {
-    const requestData = await req.json();
+    var requestData = await req.json();
+   
+    // Validate that videoId exists
+    var videoId = requestData.videoId;
+    if (!videoId) {
+      return createErrorResponse("Missing videoId in request body", 400);
+    }
     print({
-      location: 'summary-route',
+      location: "summary-route",
       type: LogType.Success,
-      mss: 'Received data:',
+      mss: "Received data:",
       data: requestData
     });
 
-    // Validate videoId exists
-    const videoId = requestData.videoId;
-    if (!videoId) {
-      return new Response(
-        JSON.stringify({ error: "Missing videoId in request body" }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
-    }
 
-    const url = `https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/${videoId}`;
-
-    // Fetch transcript with error handling
-    const transcriptResponse = await fetch(url);
-
-    if (!transcriptResponse.ok) {
-      throw new Error(`Failed to fetch transcript: ${transcriptResponse.statusText}`);
-    }
-
-    const transcriptData = await transcriptResponse.text();
+    var transcriptUrl = "https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/" + videoId;
+    
+    /*
+      Here we assume that the transcript endpoint returns a JSON response
+      with a property 'transcript', for example:
+      {
+        "transcript": "The transcript text..."
+      }
+    */
+    var transcriptResponseData = await enhancedFetch(transcriptUrl, { timeout: 8000 });
+    print({
+      location: "summary-route",
+      type: LogType.Information,
+      mss: "script fitched :",
+      data: transcriptResponseData
+    });
 
     return new Response(
-      JSON.stringify({ transcript: transcriptData, error: null }),
+
+      JSON.stringify( transcriptResponseData),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       }
     );
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    var errorMessage = error instanceof Error ? error.message : "Unknown error";
+    var errorStack = error instanceof Error ? error.stack : undefined;
+
     print({
-      location: 'summary-route',
+      location: "summary-route",
       type: LogType.Error,
-      mss: `Error:`,
-      data:errorMessage
+      mss: "Error:",
+      data: errorMessage
     });
 
-    // Proper error response with status code
-    return new Response(
-      JSON.stringify({
-        error: errorMessage,
-        stack: error instanceof Error ? error.stack : undefined
-      }),
-      {
-        status: error instanceof Error && 'status' in error ?
-          (error as any).status : 500,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    var statusCode = (error instanceof Error && "status" in error) ? (error as any).status : 500;
+    return createErrorResponse(errorMessage, statusCode, errorStack);
   }
 }

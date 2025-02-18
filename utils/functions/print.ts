@@ -74,7 +74,7 @@ export enum LogType {
     console.log(`\n \n◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼ \n${envPrefix}`)
     consoleMethod(`${header}`);
     if (message) consoleMethod(message);
-    if (data !== undefined) consoleMethod(`\n Data:`, formattedData);
+    if (data !== undefined) consoleMethod(`\n Data =>`, formattedData);
     console.log(`◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼  \n \n`)
   }
   
