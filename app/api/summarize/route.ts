@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { LogType, print } from "@/utils/functions/print";
-import enhancedFetch from "@/utils/functions/enhanced-fetch";
+import {enhancedFetch , ResponseType} from "@/utils/functions/enhanced-fetch";
 
 /**
  * Creates a standardized error response.
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         "transcript": "The transcript text..."
       }
     */
-    var transcriptResponseData = await enhancedFetch(transcriptUrl, { timeout: 8000 });
+    var transcriptResponseData = await enhancedFetch(transcriptUrl,{ timeout: 8000 } ,ResponseType.TEXT);
     print({
       location: "summary-route",
       type: LogType.Information,

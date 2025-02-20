@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { generateSummaryService } from "@/utils/functions/generate-summary-service";
+import {enhancedFetch , ResponseType} from "@/utils/functions/enhanced-fetch";
+
 
 export default function VideoUrlForm() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -47,9 +49,28 @@ export default function VideoUrlForm() {
                     throw new Error("Invalid YouTube URL");
                 }
     
-                const result = await generateSummaryService(videoId);
-                if (result.error) {
-                    throw new Error(result.error.message);
+                // old fetching function
+                // const result = await generateSummaryService(videoId);
+                // if (result.error) {
+                //    throw new Error(result.error.message);
+                
+                //  new way 
+                let result ;
+                try{
+                   result= await enhancedFetch<{data:string}>(
+                    '/api/summarize',
+                   
+                    {
+                        method:'POST',
+                        headers: { "Content-Type": "text/plain" },
+                        body: JSON.stringify({ videoId })
+                    } ,
+                    ResponseType.JSON
+                )
+                }
+                catch(error){
+                    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+                    return errorMessage;
                 }
     
                 toast({
