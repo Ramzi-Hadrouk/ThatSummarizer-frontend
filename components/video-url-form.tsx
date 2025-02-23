@@ -4,8 +4,8 @@ import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { generateSummaryService } from "@/utils/functions/generate-summary-service";
 import {enhancedFetch , ResponseType} from "@/utils/functions/enhanced-fetch";
+
 
 
 export default function VideoUrlForm() {
@@ -57,10 +57,10 @@ export default function VideoUrlForm() {
                 //  new way 
                 let result ;
                 try{
-                   result= await enhancedFetch<{data:string}>(
+                   result= await enhancedFetch<string>(
                     '/api/summarize',
                    
-                    {
+                    { timeout:20000,
                         method:'POST',
                         headers: { "Content-Type": "text/plain" },
                         body: JSON.stringify({ videoId })
@@ -82,9 +82,11 @@ export default function VideoUrlForm() {
                 print({
                     location: "video-url-form",
                     type: LogType.Success,
-                    mss: "Summary generated successfully",
+                    mss: "transcript generated successfully",
                     data: result,
                 });
+                //let  summary = await generateSummary(result) ;
+                
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
                 

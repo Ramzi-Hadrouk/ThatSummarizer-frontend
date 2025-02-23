@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { LogType, print } from "@/utils/functions/print";
 import {enhancedFetch , ResponseType} from "@/utils/functions/enhanced-fetch";
-
+ import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary";
 /**
  * Creates a standardized error response.
  *
@@ -60,17 +60,26 @@ export async function POST(req: NextRequest): Promise<Response> {
         "transcript": "The transcript text..."
       }
     */
-    var transcriptResponseData = await enhancedFetch(transcriptUrl,{ timeout: 8000 } ,ResponseType.TEXT);
+    var transcriptResponseData : string = await enhancedFetch(transcriptUrl,{ timeout: 20000 } ,ResponseType.TEXT);
     print({
       location: "summary-route",
       type: LogType.Information,
       mss: "script fitched :",
       data: transcriptResponseData
     });
+      
+
+    let  summary = await geminiGenerateSummary(transcriptResponseData) ;
+                print({
+                    location: " summarize route ",
+                    type: LogType.Success,
+                    mss: "Summary generated successfully",
+                    data: summary,
+                });
 
     return new Response(
 
-      JSON.stringify( transcriptResponseData),
+      JSON.stringify( summary),
       {
         status: 200,
         headers: { "Content-Type": "application/json" }
