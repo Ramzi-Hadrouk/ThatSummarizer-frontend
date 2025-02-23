@@ -1,29 +1,8 @@
 import { NextRequest } from "next/server";
 import { LogType, print } from "@/utils/functions/print";
 import {enhancedFetch , ResponseType} from "@/utils/functions/enhanced-fetch";
- import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary";
-/**
- * Creates a standardized error response.
- *
- * @param {string} message - The error message.
- * @param {number} status - The HTTP status code.
- * @param {string} [stack] - An optional error stack.
- * @returns {Response} The formatted error response.
- */
-function createErrorResponse(message: string, status: number, stack?: string): Response {
-  return new Response(
-    JSON.stringify({
-      error: {
-        message: message,
-        stack: stack ? stack : null
-      }
-    }),
-    {
-      status: status,
-      headers: { "Content-Type": "application/json" }
-    }
-  );
-}
+import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary";
+import { createErrorResponse } from "@/utils/functions/create-error-response";
 
 /**
  * Handles the POST request to fetch a YouTube transcript.

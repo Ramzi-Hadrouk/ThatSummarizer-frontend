@@ -1,17 +1,18 @@
 'use server '
-import { GoogleGenerativeAI }from "@google/generative-ai" ;
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY! );
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash", // Updated to current model name
-  systemInstruction: `You are a content processing assistant. For any provided content:
-1. Generate a compelling title
-2. Create a first-person summary with 5 key topics
-3. Create YouTube description with keywords
-4. List key points with benefits
-5. Provide optimized keywords
-Respond in the same language as the input text.`,
+  systemInstruction: `For the given text, complete the following tasks: 
+  1. Generate a Title: Create a compelling and relevant title based on the content.  
+  2. Summarize the Content: Write a first-person summary in a natural tone, highlighting five key topics.  
+  3. Write a YouTube Video Description:
+    - Structure it with headings and sections.  
+    - Include relevant keywords and key takeaways.  
+  4. Generate a Bullet List: Outline key points and benefits concisely.  
+  5. Suggest Optimal Keywords: Provide a list of the best recommended keywords for visibility and engagement. `,
 });
 
 const generationConfig = {
