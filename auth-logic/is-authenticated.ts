@@ -6,12 +6,14 @@ async function isAuthenticated(jwt: string | undefined) {
   const url = `${baseUrl}/api/users/me`
   console.log('URL:', url);
   // Read JWT from cookies if not provided
-  if (!jwt) {
+  let token=jwt ;
+  if (!token) {
     const cookieStore = cookies(); // Read cookies on the server
-    jwt = cookieStore.get("jwt")?.value; // Assuming JWT is stored in "jwt" cookie
+    token = cookieStore.get("jwt")?.value; // Assuming JWT is stored in "jwt" cookie
+    
   }
 
-  if (!jwt) {
+  if (!token) {
     return { isValid: false, data: null, error: "No JWT found" };
   }
 
@@ -19,10 +21,10 @@ async function isAuthenticated(jwt: string | undefined) {
     const response = await axios.get(url, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    return { isValid: true, data: response.data, error: null };
+    return { isValid: true, data: response.data, error: null ,token:token };
   } catch (error: any) {
 
     // في حالة وجود خطأ في الاستجابة (مثل 4xx أو 5xx)
