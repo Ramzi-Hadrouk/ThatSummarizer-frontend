@@ -3,18 +3,8 @@ import { LogType, print } from "@/utils/functions/print";
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
 import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary";
 import { createErrorResponse } from "@/utils/functions/create-error-response";
-import isAuthenticated from "@/auth-logic/is-authenticated";
-import { getCurrentDate } from "@/utils/functions/get-current-date";
 import { sendSummaryToBackend } from "@/utils/functions/send-summary-to-backend";
-/**
- * Handles the POST request to fetch a YouTube transcript.
- *
- * Expects the request JSON to contain a property `videoId`.
- * Uses the enhancedFetch function to perform the request with a timeout.
- *
- * @param {NextRequest} req - The incoming request.
- * @returns {Promise<Response>} A promise that resolves with the HTTP response.
- */
+
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     var requestData = await req.json();
@@ -38,52 +28,16 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
 
 
-    let summary = await geminiGenerateSummary(transcriptResponseData);
+    let summaryResponse = await geminiGenerateSummary(transcriptResponseData);
     print({
-      location: " summarize route ", type: LogType.Success, mss: "Summary generated successfully", data: summary,
+      location: " summarize route ", type: LogType.Success, mss: "Summary generated successfully", data: summaryResponse,
     });
     
-    //----send to the backend-------------------
-    /*const BackendApiEndPoint = `${process.env.BASE_URL || "http://localhost:1337"}/api/summaries`;
-
-    const user = await isAuthenticated(undefined);
-    if (!user?.isValid || !user?.token) {
-      throw new Error("User Not Authenticated - No Token Found");
-    }
     
-    print({
-      location: "summarize route",
-      type: LogType.Success,
-      mss: "VALID USER",
-      data: user,
-    });
-    
-    const date: string = getCurrentDate();
-    
-    let summaryObject = {
-      "data": {
-      video_id: "test from frontend",
-      title: "test",
-      summary: "test",
-      author_id: "test",
-      date: date,
-    }};
-    
-    var response = await enhancedFetch(BackendApiEndPoint, {
-      timeout: 20000,
-      method: "POST",
-      body: JSON.stringify(summaryObject),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${user.token}`,
-      },
-    });
-
-  */
     let summaryObject = {
       video_id: "test  THREE from frontend using function ",
       title: "test",
-      summary:summary ,
+      summary:summaryResponse ,
       author_id: "test"
       
     };
@@ -91,7 +45,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     let sendSummaryToBackendResponse = await sendSummaryToBackend(summaryObject);
     return new Response(
 
-      JSON.stringify(summary),
+      JSON.stringify(summaryResponse),
       {
         status: 200,
         headers: { "Content-Type": "application/json" }

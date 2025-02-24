@@ -54,18 +54,18 @@ export default function VideoUrlForm() {
     //=================================
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="flex w-screen max-w-sm items-center space-x-2  shadow-white">
+        <form onSubmit={handleSubmit} >
+            <div className="flex  justify-center  border border-spacing-1 items-center space-x-2  shadow-white">
                 <Input
                     type="url"
                     placeholder="Enter video URL"
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
-                    className="flex-grow w-72 "
+                    className=" lg:w-80 "
                     disabled={loading}
                 />
                 <Button type="submit" disabled={loading}>
-                    {loading ? "Processing..." : "Create Summary"}
+                    {loading ? "Processing..." : "Summarize"}
                 </Button>
             </div>
         </form>
