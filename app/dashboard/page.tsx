@@ -4,7 +4,7 @@ import VideoUrlForm from '@/components/video-url-form'
 import CardView from "@/components/card-view"
 import TableView from "@/components/table-view"
 import ViewToggle from "@/components/view-toggel"
-
+ 
 
 const data = [
   {
@@ -89,6 +89,7 @@ function page() {
         </div>
 
       </main>
+    
     </main>
 
 
