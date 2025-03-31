@@ -1,39 +1,40 @@
 export function extractTitleLine(summaryResponse: string): string | null {
     const lines = summaryResponse.split('\n');
-  
-    // First pass: Check for "##...title..." followed by a bold line
+
+    // First pass: Check ##...title... patterns
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
+        
         if (line.startsWith('##') && line.toLowerCase().includes('title')) {
-            // Search subsequent lines for the first non-empty line
+            // Check for title in same ## line
+            const sameLineMatch = line.match(/##.*title:?[\s]*([^\n#]*)/i);
+            if (sameLineMatch?.[1]?.trim()) {
+                return sameLineMatch[1].trim();
+            }
+
+            // Check next non-empty line for bold
             for (let j = i + 1; j < lines.length; j++) {
                 const nextLine = lines[j].trim();
-                if (nextLine === '') continue;
+                if (!nextLine) continue;
                 const boldMatch = nextLine.match(/\*\*(.*?)\*\*/);
-                if (boldMatch?.[1]) {
-                    return boldMatch[1].trim();
-                }
-                break; // Only check the first non-empty line
+                if (boldMatch?.[1]) return boldMatch[1].trim();
+                break;
             }
         }
     }
-  
-    // Second pass: Check for titles directly in bold lines
+
+    // Second pass: Check bold patterns
     for (const line of lines) {
-        const trimmedLine = line.trim();
+        const trimmed = line.trim();
         
-        // Case 1: Title is entirely inside bold (e.g., **Title: My Title**)
-        const matchInsideBold = trimmedLine.match(/\*\*.*?title:\s*([^*]+)\*\*/i);
-        if (matchInsideBold?.[1]) {
-            return matchInsideBold[1].trim();
-        }
-  
-        // Case 2: Title is after bold (e.g., **Title:** My Title)
-        const matchAfterBold = trimmedLine.match(/\*\*.*?title:\s*\*\*\s*([^*]*)/i);
-        if (matchAfterBold?.[1]?.trim()) {
-            return matchAfterBold[1].trim();
-        }
+        // Case 1: Title AFTER bold (**Title:** My Title)
+        const afterBoldMatch = trimmed.match(/^\*\*.*?title:\s*\*\*\s*(.+)/i);
+        if (afterBoldMatch?.[1]) return afterBoldMatch[1].trim();
+
+        // Case 2: Title INSIDE bold (**Title: My Title**)
+        const insideBoldMatch = trimmed.match(/^\*\*.*?title:\s*([^*]+)\*\*/i);
+        if (insideBoldMatch?.[1]) return insideBoldMatch[1].trim();
     }
-  
-    return null; // No title found
-  }
+
+    return null;
+}

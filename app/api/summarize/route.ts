@@ -6,65 +6,106 @@ import { createErrorResponse } from "@/utils/functions/create-error-response";
 import { sendSummaryToBackend } from "@/utils/functions/send-summary-to-backend";
 import { extractTitleLine } from "@/utils/functions/extractTitleLine";
 
-
 export async function POST(req: NextRequest): Promise<Response> {
   try {
-    var requestData = await req.json();
+    // Parse and validate request
+    const requestData = await req.json();
+    const videoId = requestData.videoId;
 
-    // Validate that videoId exists
-    var videoId = requestData.videoId;
     if (!videoId) {
       return createErrorResponse("Missing videoId in request body", 400);
     }
-    print({
-      location: "summary-route", type: LogType.Success, mss: "Received data:", data: requestData
-    });
 
+    // Fetch transcript
+    const transcriptUrl = `https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/${videoId}`;
+    let transcriptResponseData: string;
 
-    var transcriptUrl = "https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/" + videoId;
-
-
-    var transcriptResponseData: string = await enhancedFetch(transcriptUrl, { timeout: 20000 }, ResponseType.TEXT);
-    print({
-      location: "summary-route", type: LogType.Information, mss: "script fitched :", data: transcriptResponseData
-    });
-
-
-    let summaryResponse = await geminiGenerateSummary(transcriptResponseData);
-    print({
-      location: " summarize route ", type: LogType.Success, mss: "Summary generated successfully", data: summaryResponse,
-    });
-    
-    
-    let summaryObject = {
-      video_id: videoId,
-      title: extractTitleLine(summaryResponse),
-      summary:summaryResponse ,
-      author_id: "test"
-      
-    };
-    
-    let sendSummaryToBackendResponse = await sendSummaryToBackend(summaryObject);
-    return new Response(
-
-      JSON.stringify(summaryResponse),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
+    try {
+      transcriptResponseData = await enhancedFetch(
+        transcriptUrl,
+        { timeout: 20000 },
+        ResponseType.TEXT
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("timeout")) {
+          return createErrorResponse("Transcript service timeout", 504);
+        }
+        if (error.message.includes("fetch failed")) {
+          return createErrorResponse("Transcript service unavailable", 503);
+        }
       }
-    );
-  } catch (error) {
-    var errorMessage = error instanceof Error ? error.message : "Unknown error";
-    var errorStack = error instanceof Error ? error.stack : undefined;
+      throw error;
+    }
 
+    // Validate transcript response
+    try {
+      const parsedResponse = JSON.parse(transcriptResponseData);
+      if (parsedResponse.error) {
+        if (parsedResponse.error.includes("Transcript panel not found")) {
+          return createErrorResponse("Transcript not available for this video", 404);
+        }
+        return createErrorResponse(`Transcript error: ${parsedResponse.error}`, 400);
+      }
+    } catch (error) {
+      if (!(error instanceof SyntaxError)) {
+        return createErrorResponse("Invalid transcript response format", 502);
+      }
+    }
+
+    // Generate summary
+    let summaryResponse: string;
+    try {
+      summaryResponse = await geminiGenerateSummary(transcriptResponseData);
+      if (!summaryResponse?.trim()) {
+        return createErrorResponse("Empty summary generated", 500);
+      }
+    } catch (error) {
+      return createErrorResponse("Summary generation failed", 500);
+    }
+
+    // Prepare and validate summary object
+    const summaryObject = {
+      video_id: videoId,
+      title: extractTitleLine(summaryResponse) || "Untitled Video",
+      summary: summaryResponse,
+      author_id: "test"
+    };
+
+    if (!summaryObject.title || !summaryObject.summary) {
+      return createErrorResponse("Invalid summary format", 500);
+    }
+
+    // Send to backend
+    try {
+      const backendResponse = await sendSummaryToBackend(summaryObject);
+      if (!backendResponse.ok) {
+        const status = backendResponse.status >= 400 ? backendResponse.status : 502;
+        const message = `Backend service error: ${backendResponse.statusText}`;
+        return createErrorResponse(message, status);
+      }
+    } catch (error) {
+      return createErrorResponse("Backend service unavailable", 503);
+    }
+
+    // Success response
+    return new Response(
+      JSON.stringify({
+        success: true,
+        data: summaryResponse
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+
+  } catch (error) {
+    // Handle unexpected errors
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     print({
       location: "summary-route",
       type: LogType.Error,
-      mss: "Error:",
+      mss: "Unexpected error:",
       data: errorMessage
     });
-
-    var statusCode = (error instanceof Error && "status" in error) ? (error as any).status : 500;
-    return createErrorResponse(errorMessage, statusCode, errorStack);
+    return createErrorResponse("Internal server error", 500);
   }
 }
