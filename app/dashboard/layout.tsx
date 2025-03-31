@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-
+ import { Toaster } from "@/components/ui/toaster";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className=" min-h-screen  flex">
@@ -20,8 +20,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="  flex-1 py-9 px-12">
             {children}
           </div>
+
         </div>
       </SidebarProvider>
+      <Toaster/>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+// /api/summarize route improvements
 import { NextRequest } from "next/server";
 import { LogType, print } from "@/utils/functions/print";
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
@@ -5,18 +6,37 @@ import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary
 import { createErrorResponse } from "@/utils/functions/create-error-response";
 import { sendSummaryToBackend } from "@/utils/functions/send-summary-to-backend";
 import { extractTitleLine } from "@/utils/functions/extractTitleLine";
+import { z } from "zod";
+
+const RequestSchema = z.object({
+  videoId: z.string().min(11).max(11).regex(/^[a-zA-Z0-9_-]{11}$/)
+});
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
-    // Parse and validate request
-    const requestData = await req.json();
-    const videoId = requestData.videoId;
-
-    if (!videoId) {
-      return createErrorResponse("Missing videoId in request body", 400);
+    // Validate request body
+    const rawBody = await req.text();
+    console.log('rawVody '+ rawBody)
+    if (!rawBody) return createErrorResponse("Empty request body", 400);
+    
+    let requestData;
+    try {
+      requestData = JSON.parse(rawBody);
+    } catch {
+      return createErrorResponse("Invalid JSON format", 400);
     }
 
-    // Fetch transcript
+    const validation = RequestSchema.safeParse(requestData);
+    if (!validation.success) {
+      return createErrorResponse(
+        `Invalid videoId: ${validation.error.errors[0]?.message || "Invalid format"}`,
+        400
+      );
+    }
+
+    const { videoId } = validation.data;
+
+    // Fetch transcript with improved error handling
     const transcriptUrl = `https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/${videoId}`;
     let transcriptResponseData: string;
 
@@ -28,32 +48,27 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message.includes("timeout")) {
-          return createErrorResponse("Transcript service timeout", 504);
-        }
-        if (error.message.includes("fetch failed")) {
-          return createErrorResponse("Transcript service unavailable", 503);
-        }
+        print({
+          location: "summary-route/transcript-fetch",
+          type: LogType.Error,
+          mss: error.message
+        });
+        return createErrorResponse(
+          error.message.includes("timeout") 
+            ? "Transcript service timeout" 
+            : "Transcript service unavailable",
+          error.message.includes("timeout") ? 504 : 503
+        );
       }
-      throw error;
+      return createErrorResponse("Unknown transcript error", 500);
     }
 
-    // Validate transcript response
-    try {
-      const parsedResponse = JSON.parse(transcriptResponseData);
-      if (parsedResponse.error) {
-        if (parsedResponse.error.includes("Transcript panel not found")) {
-          return createErrorResponse("Transcript not available for this video", 404);
-        }
-        return createErrorResponse(`Transcript error: ${parsedResponse.error}`, 400);
-      }
-    } catch (error) {
-      if (!(error instanceof SyntaxError)) {
-        return createErrorResponse("Invalid transcript response format", 502);
-      }
+    // Validate transcript content
+    if (!transcriptResponseData?.trim()) {
+      return createErrorResponse("Empty transcript received", 404);
     }
 
-    // Generate summary
+    // Generate summary with content validation
     let summaryResponse: string;
     try {
       summaryResponse = await geminiGenerateSummary(transcriptResponseData);
@@ -61,44 +76,54 @@ export async function POST(req: NextRequest): Promise<Response> {
         return createErrorResponse("Empty summary generated", 500);
       }
     } catch (error) {
+      print({
+        location: "summary-route/summary-generation",
+        type: LogType.Error,
+        mss: "Gemini generation failed",
+        data: error instanceof Error ? error.message : "Unknown error"
+      });
       return createErrorResponse("Summary generation failed", 500);
     }
 
-    // Prepare and validate summary object
+    // Construct summary payload
+    const title = extractTitleLine(summaryResponse);
     const summaryObject = {
       video_id: videoId,
-      title: extractTitleLine(summaryResponse) || "Untitled Video",
-      summary: summaryResponse,
+      title: title?.trim() || "Untitled Video",
+      summary: summaryResponse.trim(),
       author_id: "test"
     };
 
-    if (!summaryObject.title || !summaryObject.summary) {
-      return createErrorResponse("Invalid summary format", 500);
+    // Validate final payload
+    if (!summaryObject.summary || summaryObject.summary.length < 100) {
+      return createErrorResponse("Insufficient summary content", 500);
     }
 
-    // Send to backend
+    // Backend submission with improved error handling
     try {
       const backendResponse = await sendSummaryToBackend(summaryObject);
       if (!backendResponse.ok) {
-        const status = backendResponse.status >= 400 ? backendResponse.status : 502;
-        const message = `Backend service error: ${backendResponse.statusText}`;
-        return createErrorResponse(message, status);
+        const errorData = await backendResponse.json().catch(() => ({}));
+        return createErrorResponse(
+          errorData.message || "Backend submission failed",
+          backendResponse.status
+        );
       }
     } catch (error) {
       return createErrorResponse("Backend service unavailable", 503);
     }
 
-    // Success response
+    // Success response with full status information
     return new Response(
       JSON.stringify({
         success: true,
+        status: 200,
         data: summaryResponse
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
 
   } catch (error) {
-    // Handle unexpected errors
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     print({
       location: "summary-route",
