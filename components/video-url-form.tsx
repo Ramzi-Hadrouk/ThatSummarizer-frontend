@@ -36,7 +36,7 @@ export default function VideoUrlForm() {
                     ResponseType.JSON
                 );
 
-                if (result) toast.success("Summary generated successfully!");
+                if (result!== null ) toast.success("Summary generated successfully!");
                 throw new Error("Failed to generate summary");
 
             } catch (error) {

@@ -4,6 +4,8 @@ import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
 import { geminiGenerateSummary } from "@/utils/functions/gemini-generate-summary";
 import { createErrorResponse } from "@/utils/functions/create-error-response";
 import { sendSummaryToBackend } from "@/utils/functions/send-summary-to-backend";
+import { extractTitleLine } from "@/utils/functions/extractTitleLine";
+
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -35,8 +37,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     
     
     let summaryObject = {
-      video_id: "test  THREE from frontend using function ",
-      title: "test",
+      video_id: videoId,
+      title: extractTitleLine(summaryResponse),
       summary:summaryResponse ,
       author_id: "test"
       
