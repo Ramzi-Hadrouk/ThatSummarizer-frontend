@@ -16,9 +16,9 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     // Validate request body
     const rawBody = await req.text();
-    console.log('rawVody '+ rawBody)
+    console.log('rawVody ' + rawBody)
     if (!rawBody) return createErrorResponse("Empty request body", 400);
-    
+
     let requestData;
     try {
       requestData = JSON.parse(rawBody);
@@ -36,6 +36,29 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const { videoId } = validation.data;
 
+    // check if summary exist ---------------
+    const summary: { data: [any] } = await enhancedFetch(
+      `${process.env.BASE_URL || "http://localhost:1337"}/api/summaries?filters[video_id][$eq]=${videoId}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        timeout: 20000
+      },
+      ResponseType.JSON
+    );
+
+    if (summary?.data.length === 1) {
+      // Success response with full status information
+      return new Response(
+        JSON.stringify({
+          success: true,
+          status: 201,
+        }),
+        { status: 201, headers: { "Content-Type": "application/json" } }
+      );
+
+    }
+    //--------------------------------------
     // Fetch transcript with improved error handling
     const transcriptUrl = `https://deserving-harmony-9f5ca04daf.strapiapp.com/utilai/yt-transcript/${videoId}`;
     let transcriptResponseData: string;
@@ -54,8 +77,8 @@ export async function POST(req: NextRequest): Promise<Response> {
           mss: error.message
         });
         return createErrorResponse(
-          error.message.includes("timeout") 
-            ? "Transcript service timeout" 
+          error.message.includes("timeout")
+            ? "Transcript service timeout"
             : "Transcript service unavailable",
           error.message.includes("timeout") ? 504 : 503
         );

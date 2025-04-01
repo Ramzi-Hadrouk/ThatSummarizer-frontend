@@ -36,6 +36,7 @@ export default function VideoUrlForm() {
           return;
         }
 
+
         const data: SummaryResponse = await enhancedFetch(
           "/api/summarize",
           {
@@ -50,11 +51,21 @@ export default function VideoUrlForm() {
         if (!data.success) {
           throw new Error(data.error || "Request failed");
         }
-
+        if(data.status===201){
+          toast({
+            title: "Success!",
+            description: "Summary Already Exist",
+            variant:'success',
+          });
+        
+        }
+        else{
         toast({
           title: "Success!",
           description: "Summary generated successfully",
+          variant:'success',
         });
+      }
         console.log("Generated Summary:", data.data);
 
       } catch (error) {
@@ -66,7 +77,7 @@ export default function VideoUrlForm() {
           title = "Validation Error";
           description = error.errors[0]?.message || "Invalid input";
         } else if (error instanceof Error) {
-          description = error.message;
+          description =error.message;
           
           if (error.message.includes("Network Error")) {
             title = "Connection Failed";
@@ -77,11 +88,11 @@ export default function VideoUrlForm() {
           }
         }
 
-      /*  toast({
+        toast({
           title: status ? `${title} (${status})` : title,
           description,
           variant: "destructive",
-        });*/
+        });
 
       } finally {
         setLoading(false);
