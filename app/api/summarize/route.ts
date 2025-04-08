@@ -7,10 +7,19 @@ import { createErrorResponse } from "@/utils/functions/create-error-response";
 import { sendSummaryToBackend } from "@/utils/functions/send-summary-to-backend";
 import { extractTitleLine } from "@/utils/functions/extractTitleLine";
 import { z } from "zod";
+import { extractDescription } from "@/utils/functions/extractDescription";
 
 const RequestSchema = z.object({
   videoId: z.string().min(11).max(11).regex(/^[a-zA-Z0-9_-]{11}$/)
 });
+
+interface summaryData{
+  video_id: string;
+  title: string;
+  summary: string;
+  description: string;
+  date?: string ;
+}
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -110,11 +119,12 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Construct summary payload
     const title = extractTitleLine(summaryResponse);
-    const summaryObject = {
+    const description = extractDescription(summaryResponse)
+    const summaryObject :summaryData= {
       video_id: videoId,
       title: title?.trim() || "Untitled Video",
       summary: summaryResponse.trim(),
-      author_id: "test"
+      description:description|| "No description "
     };
 
     // Validate final payload

@@ -5,7 +5,7 @@ import { getCurrentDate } from "./get-current-date";
     video_id: string;
     title: string;
     summary: string;
-    author_id: string;
+    description: string;
     date?: string ;
   }
  

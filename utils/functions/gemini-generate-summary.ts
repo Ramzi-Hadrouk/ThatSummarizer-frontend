@@ -7,16 +7,22 @@ const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash", // Updated to current model name
   systemInstruction: `For the given text, complete the following tasks: 
   1. Generate a Title: Create a compelling and relevant title based on the content.  
+  1. Generate a introduction: Create a compelling and relevant introduction based on the content.  
   2. Summarize the Content: Write a first-person summary in a natural tone, highlighting five key topics.  
   3. Write a YouTube Video Description:
     - Structure it with headings and sections.  
     - Include relevant keywords and key takeaways.  
   4. Generate a Bullet List: Outline key points and benefits concisely.  
-  5. Suggest Optimal Keywords: Provide a list of the best recommended keywords for visibility and engagement. `,
+  5. Suggest Optimal Keywords: Provide a list of the best recommended keywords for visibility and engagement. 
+  
+  important note : dont let empty lines between titles and contents 
+  `
+  
+,
 });
 
 const generationConfig = {
-  temperature: 0.9, // Adjusted to safer value
+  temperature: 0.7, // Adjusted to safer value
   topP: 0.95,
   topK: 40,
   maxOutputTokens: 8192,
