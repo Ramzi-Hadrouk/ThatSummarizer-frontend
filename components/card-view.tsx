@@ -62,7 +62,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch"
 import { useEffect, useState } from "react"
-
+import { PaginationDemo } from '@/components/Pagination-demo';
 interface DataItem {
   id: number
   attributes: {
@@ -72,6 +72,13 @@ interface DataItem {
     video_id: string
   }
 }
+interface metaDataType {
+  pagination: {
+    page: number,
+    pageSize: number,
+    pageCount: number|1,
+    total: number
+  } }
 
 function getFirstTwoLines(text: string): string {
   const words = text.trim().split(/\s+/); // split on any whitespace
@@ -82,14 +89,23 @@ function getFirstTwoLines(text: string): string {
 
 export default function CardView() {
   const [data, setData] = useState<DataItem[]>([])
+  const [metaData , setMetaData]=useState<metaDataType>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const TOTAL_PAGES:number = metaData?.pagination?.pageCount // or get it from your data
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    // Optionally fetch new data here
+  }
+  //http://localhost:1337/api/summaries/?pagination[page]=2&pagination[pageSize]=5&sort[0]=createdAt:desc
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const summary: { data: DataItem[] } = await enhancedFetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:1337"}/api/summaries`,
+        const summary: { data: DataItem[] , meta:metaDataType } = await enhancedFetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:1337"}/api/summaries/?pagination[page]=2&pagination[pageSize]=5&sort[0]=createdAt:desc`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -98,6 +114,7 @@ export default function CardView() {
           ResponseType.JSON
         )
         setData(summary.data)
+        setMetaData(summary.meta)
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
@@ -108,7 +125,7 @@ export default function CardView() {
     fetchData()
   }, [])
 
-  if (loading)return (<LoadingItem/>)
+  if (loading)return (<LoadingItem fontSize="text-2xl"/>)
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -138,6 +155,11 @@ export default function CardView() {
           </CardFooter>
         </Card>
       ))}
+       <PaginationDemo
+        currentPage={currentPage}
+        totalPages={TOTAL_PAGES}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }

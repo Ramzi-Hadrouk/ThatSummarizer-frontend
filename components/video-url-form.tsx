@@ -7,7 +7,7 @@ import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
 import { validateYouTubeUrl } from "@/utils/functions/validate-youtube-url";
 import { useToast } from "@/hooks/use-toast";
 import { ZodError } from "zod";
-
+ import LoadingItem from "@/components/loading-Item";
 type SummaryResponse = {
   success: boolean;
   status?: number;
@@ -121,12 +121,7 @@ export default function VideoUrlForm() {
           className="py-6 px-8 "
           aria-live="polite"
         >
-          {loading ? (
-            <span className="flex items-center">
-              <span className="animate-spin mr-2">↻</span>
-              Processing...
-            </span>
-          ) : "Summarize"}
+          {loading ? (<LoadingItem fontSize="16"/>) : "Summarize"}
         </Button>
       </div>
       

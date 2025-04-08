@@ -85,7 +85,7 @@ function page() {
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Summaries</h1>
 
-          {view === "card" ? <CardView data={data} view={view} /> : <TableView data={data} view={view} />}
+          {view === "card" ? <CardView   /> : <TableView data={data} view={view} />}
         </div>
 
       </main>
