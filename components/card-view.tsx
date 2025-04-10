@@ -27,7 +27,7 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
       {
         data.map((item) => (
-          <Card key={item.id} className="flex  flex-col border-spacing-1 border">
+          <Card key={item.id} className="flex  flex-col border-spacing-1 border-[#4444] border">
             <CardHeader>
               <CardTitle className="flex justify-between text-md sm:text-xl font-medium items-start">
                 <span>{item.attributes?.title}</span>
