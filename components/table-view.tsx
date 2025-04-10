@@ -4,19 +4,23 @@ import { Badge } from "@/components/ui/badge"
 
 interface DataItem {
   id: number
-  title: string
-  description: string
-  date: string
-  category: string
-  author: string
+  attributes: {
+    title: string
+    description: string
+    date: string,
+    video_id: string
+  }
 }
 
-interface TableViewProps {
-  data: DataItem[]
-  view: "card" | "table"
+
+function getFirstTwoLines(text: string): string {
+  const words = text.trim().split(/\s+/); // split on any whitespace
+  const first25 = words.slice(0, 25);
+  return first25.join(' ');
 }
 
-export default function TableView({ data, view }: TableViewProps) {
+ 
+export default function TableView({ data = [] }: { data?: DataItem[] }) {
   return (
     <div className="mb-6 overflow-x-auto">
       <Table>
@@ -25,26 +29,22 @@ export default function TableView({ data, view }: TableViewProps) {
             <TableHead>Title</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Author</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.title}</TableCell>
-              <TableCell>{item.description}</TableCell>
-              <TableCell>{item.date}</TableCell>
-              <TableCell>
-                <Badge variant="secondary">{item.category}</Badge>
+              <TableCell className="font-medium">{item.attributes.title}</TableCell>
+              <TableCell>{getFirstTwoLines(item.attributes.description)}</TableCell>
+              <TableCell> <Badge variant="secondary">{item.attributes.date}</Badge>
               </TableCell>
-              <TableCell>{item.author}</TableCell>
               <TableCell>
                 <Button variant="outline" size="sm">
                   Read More
                 </Button>
               </TableCell>
+
             </TableRow>
           ))}
         </TableBody>

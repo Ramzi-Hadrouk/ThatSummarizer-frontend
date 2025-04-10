@@ -1,101 +1,89 @@
 'use client'
-import { useState } from 'react'
+import LoadingItem from '@/components/loading-Item';
 import VideoUrlForm from '@/components/video-url-form'
 import CardView from "@/components/card-view"
 import TableView from "@/components/table-view"
 import ViewToggle from "@/components/view-toggel"
- 
+import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch"
+import { useEffect, useState } from "react"
+import { PaginationDemo } from '@/components/Pagination-demo';
 
-const data = [
-  {
-    id: 1,
-    title: "Introduction to React",
-    description: "Learn the basics of React and its core concepts.",
-    date: "2023-05-15",
-    category: "Frontend",
-    author: "John Doe",
-  },
-  {
-    id: 2,
-    title: "Advanced TypeScript",
-    description: "Dive deep into TypeScript's advanced features and patterns.",
-    date: "2023-05-18",
-    category: "Programming",
-    author: "Jane Smith",
-  },
-  {
-    id: 3,
-    title: "Next.js Best Practices",
-    description: "Explore best practices for building scalable Next.js applications.",
-    date: "2023-05-20",
-    category: "Web Development",
-    author: "Alice Johnson",
-  },
-  {
-    id: 4,
-    title: "CSS Grid Mastery",
-    description: "Master CSS Grid layout for complex web designs.",
-    date: "2023-05-22",
-    category: "CSS",
-    author: "Bob Wilson",
-  },
-  {
-    id: 5,
-    title: "GraphQL Fundamentals",
-    description: "Understand the core concepts of GraphQL and its benefits.",
-    date: "2023-05-25",
-    category: "API",
-    author: "Charlie Brown",
-  },
-  {
-    id: 6,
-    title: "Responsive Web Design",
-    description: "Learn techniques for creating responsive and mobile-friendly websites.",
-    date: "2023-05-28",
-    category: "Web Design",
-    author: "Diana Miller",
-  },
-  {
-    id: 7,
-    title: "JavaScript Performance",
-    description: "Optimize your JavaScript code for better performance.",
-    date: "2023-05-30",
-    category: "JavaScript",
-    author: "Ethan Davis",
-  },
-  {
-    id: 8,
-    title: "UI/UX Principles",
-    description: "Discover key principles for creating effective user interfaces.",
-    date: "2023-06-02",
-    category: "Design",
-    author: "Fiona Taylor",
-  },
-]
+// types for data fetching 
+interface DataItem {
+  id: number
+  attributes: {
+    title: string
+    description: string
+    date: string,
+    video_id: string
+  }
+}
+interface metaDataType {
+  pagination: {
+    page: number,
+    pageSize: number,
+    pageCount: number,
+    total: number
+  }
+}
 
 function page() {
+  // use effects
+  const [data, setData] = useState<DataItem[]>([])
+  const [metaData, setMetaData] = useState<metaDataType>()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
   const [view, setView] = useState<"card" | "table">("card")
+  
+
+  let TOTAL_PAGES: number = metaData?.pagination?.pageCount || 1;
+
+  const handlePageChange = (page: number) => { setCurrentPage(page) }
+  //usefect for just fetch summaries from strapi backend 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const summary: { data: DataItem[], meta: metaDataType } = await enhancedFetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:1337"}/api/summaries/?pagination[page]=${currentPage}&pagination[pageSize]=6&sort[0]=createdAt:desc`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            timeout: 20000,
+          },
+          ResponseType.JSON
+        )
+        setData(summary.data)
+        setMetaData(summary.meta)
+        TOTAL_PAGES = metaData?.pagination?.pageCount  || 1
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [currentPage])
+ 
   return (
-    <main>
-      <VideoUrlForm />
-
+    <main >
+      <VideoUrlForm/>
       <main className="container mx-auto px-4 py-8">
-
         <ViewToggle view={view} setView={setView} />
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Summaries</h1>
-
-          {view === "card" ? <CardView   /> : <TableView data={data} view={view} />}
+          {loading && <LoadingItem fontSize="text-2xl" />}
+          {error && <div>Error: {error}</div>}
+          {view === "card" ? <CardView data={data} /> : <TableView data={data} view={view} />}
+        <PaginationDemo
+          currentPage={currentPage}
+          totalPages={TOTAL_PAGES}
+          onPageChange={handlePageChange}
+        />
         </div>
-
       </main>
-    
     </main>
-
-
-
-
-
 
   )
 }

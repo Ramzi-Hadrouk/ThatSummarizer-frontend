@@ -41,6 +41,7 @@ export function PaginationDemo({
               <PaginationLink
                 href="#"
                 isActive={page === currentPage}
+                className={`${page === currentPage && 'border-yellow-400  ' }`}
                 onClick={(e) => {
                   e.preventDefault()
                   onPageChange(page)
