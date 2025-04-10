@@ -49,7 +49,7 @@ export default function LoginLogoutButton() {
       ) : (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline"><LogOut/></Button>
+            <Button variant="outline"><LogOut size={18}/></Button>
           </AlertDialogTrigger>
           <AlertDialogContent className='bg-popover'>
             <AlertDialogHeader>

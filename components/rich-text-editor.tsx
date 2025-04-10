@@ -1,5 +1,59 @@
-"use client";
+import React, { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
+import { useConverters } from '../hooks/useConverters';
+import { convertMarkdownToHtml,convertHtmlToMarkdown } from '@/utils/functions/conversion';
+import 'react-quill/dist/quill.snow.css';
+import LoadingItem from '@/components/loading-Item';
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+  ssr: false,
+  loading: () => <LoadingItem fontSize='16'/>,
+});
 
+const RichTextEditor: React.FC = () => {
+  const [htmlContent, setHtmlContent] = useState('');
+  const [markdownContent, setMarkdownContent] = useState('');
+
+  const { turndown, showdown, loading, error } = useConverters();
+
+  const toHtml = useCallback((md: string) => convertMarkdownToHtml(md, showdown), [showdown]);
+  const toMarkdown = useCallback((html: string) => convertHtmlToMarkdown(html, turndown), [turndown]);
+
+  useEffect(() => {
+    if (showdown) {
+      const initialMarkdown = '# Sample Markdown\n\nThis is a sample.';
+      setMarkdownContent(initialMarkdown);
+      setHtmlContent(toHtml(initialMarkdown));
+    }
+  }, [showdown, toHtml]);
+
+  const handleEditorChange = (content: string) => setHtmlContent(content);
+  const handleSave = () => setMarkdownContent(toMarkdown(htmlContent));
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}. Please refresh the page.</div>;
+
+  return (
+    <div className="w-full">
+      <style>{`
+        .ql-editor {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          line-height: 1.5;
+          min-height: 200px;
+        }
+      `}</style>
+      <ReactQuill value={htmlContent} onChange={handleEditorChange} />
+      <button onClick={handleSave}>Save</button>
+      <div>
+        <h3>Markdown Output:</h3>
+        <pre>{markdownContent}</pre>
+      </div>
+    </div>
+  );
+};
+
+export default RichTextEditor;
+
+/*
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
@@ -28,7 +82,7 @@ This is a **sample** markdown text.
 const editorStyles = `
   .ql-editor {
     font-size: 1.125rem;
-    line-height: 1.8; /* Increased line spacing */
+    line-height: 1.8; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
@@ -41,7 +95,7 @@ const editorStyles = `
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  /* Markdown preview styling */
+
   .markdown-preview {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -129,7 +183,7 @@ export default function RichTextEditor() {
             value={htmlContent}
             onChange={setHtmlContent}
             theme="snow"
-            className="min-h-[300px] bg-white w-full mb-6" /* Increased min-height */
+            className="min-h-[300px] bg-white w-full mb-6" 
           />
           
           <Button
@@ -153,3 +207,6 @@ export default function RichTextEditor() {
     </div>
   );
 }
+
+
+*/

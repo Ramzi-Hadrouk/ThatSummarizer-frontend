@@ -7,6 +7,7 @@ import ViewToggle from "@/components/view-toggel"
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch"
 import { useEffect, useState } from "react"
 import { PaginationDemo } from '@/components/Pagination-demo';
+import RichTextEditor from '@/components/rich-text-editor';
 
 // types for data fetching 
 interface DataItem {
@@ -83,6 +84,8 @@ function page() {
         />
         </div>
       </main>
+
+      <RichTextEditor/>
     </main>
 
   )
