@@ -17,7 +17,7 @@ interface DataItem {
 
 function getFirstTwoLines(text: string): string {
   const words = text.trim().split(/\s+/); // split on any whitespace
-  const first25 = words.slice(0, 25);
+  const first25 = words.slice(0, 18);
   return first25.join(' ');
 }
 
@@ -29,7 +29,7 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
         data.map((item) => (
           <Card key={item.id} className="flex  flex-col border-spacing-1 border">
             <CardHeader>
-              <CardTitle className="flex justify-between text-xl font-medium items-start">
+              <CardTitle className="flex justify-between text-md sm:text-xl font-medium items-start">
                 <span>{item.attributes?.title}</span>
               </CardTitle>
             </CardHeader>

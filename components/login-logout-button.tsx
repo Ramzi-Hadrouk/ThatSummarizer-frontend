@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,7 +49,7 @@ export default function LoginLogoutButton() {
       ) : (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline">Logout</Button>
+            <Button variant="outline"><LogOut/></Button>
           </AlertDialogTrigger>
           <AlertDialogContent className='bg-popover'>
             <AlertDialogHeader>

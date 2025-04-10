@@ -69,13 +69,13 @@ function page() {
   return (
     <main >
       <VideoUrlForm/>
-      <main className="container mx-auto px-4 py-8">
+      <main className=" ">
         <ViewToggle view={view} setView={setView} />
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Summaries</h1>
           {loading && <LoadingItem fontSize="text-2xl" />}
           {error && <div>Error: {error}</div>}
-          {view === "card" ? <CardView data={data} /> : <TableView data={data} view={view} />}
+          {view === "card" ? <CardView data={data} /> : <TableView data={data}/>}
         <PaginationDemo
           currentPage={currentPage}
           totalPages={TOTAL_PAGES}

@@ -103,13 +103,13 @@ export default function VideoUrlForm() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-      <div className="flex gap-2 items-center shadow-sm rounded-lg">
+      <div className="flex gap-0 items-center ">
         <Input
           type="url"
           placeholder="Enter YouTube video URL"
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
-          className="flex-1 py-6 px-4 border-gray-300 focus:ring-2 focus:ring-blue-500"
+          className="flex-1 py-6  border-gray-300 w-4 focus:ring-2 focus:ring-blue-500"
           disabled={loading}
           pattern="^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+"
           required
@@ -118,7 +118,7 @@ export default function VideoUrlForm() {
         <Button 
           type="submit" 
           disabled={loading}
-          className="py-6 px-8 "
+          className="py-6 md:px-3 "
           aria-live="polite"
         >
           {loading ? (<LoadingItem fontSize="16"/>) : "Summarize"}
