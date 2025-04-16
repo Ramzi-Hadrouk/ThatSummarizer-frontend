@@ -7,7 +7,6 @@ import ViewToggle from "@/components/view-toggel"
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch"
 import { useEffect, useState } from "react"
 import { PaginationDemo } from '@/components/Pagination-demo';
-import RichTextEditor from '@/components/rich-text-editor';
 
 // types for data fetching 
 interface DataItem {
@@ -70,7 +69,7 @@ function page() {
   return (
     <main >
       <VideoUrlForm/>
-      <main className=" ">
+      <main >
         <ViewToggle view={view} setView={setView} />
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Summaries</h1>
@@ -85,7 +84,7 @@ function page() {
         </div>
       </main>
 
-      <RichTextEditor/>
+     
     </main>
 
   )

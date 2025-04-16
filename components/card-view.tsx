@@ -44,7 +44,7 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
 
             <CardFooter>
               <Button className="w-fit justify-self-end p-0" variant="outline">
-                <Link href={`/video/${item.attributes?.video_id}`} className='p-3 rounded-md'>
+                <Link href={`dashboard/summary/${item.attributes?.video_id}`} className='p-3 rounded-md'>
                   Read More
                 </Link>
               </Button>

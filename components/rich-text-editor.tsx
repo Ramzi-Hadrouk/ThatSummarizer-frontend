@@ -4,6 +4,7 @@ import { useConverters } from '../hooks/useConverters';
 import { convertMarkdownToHtml,convertHtmlToMarkdown } from '@/utils/functions/conversion';
 import 'react-quill/dist/quill.snow.css';
 import LoadingItem from '@/components/loading-Item';
+import { Button } from './ui/button';
 const ReactQuill = dynamic(() => import('react-quill-new'), {
   ssr: false,
   loading: () => <LoadingItem fontSize='16'/>,
@@ -33,7 +34,7 @@ const RichTextEditor: React.FC = () => {
   if (error) return <div>Error: {error}. Please refresh the page.</div>;
 
   return (
-    <div className="w-full">
+    <div className="w-full h-fit">
       <style>{`
         .ql-editor {
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -41,12 +42,9 @@ const RichTextEditor: React.FC = () => {
           min-height: 200px;
         }
       `}</style>
-      <ReactQuill value={htmlContent} onChange={handleEditorChange} />
-      <button onClick={handleSave}>Save</button>
-      <div>
-        <h3>Markdown Output:</h3>
-        <pre>{markdownContent}</pre>
-      </div>
+      <ReactQuill value={htmlContent} onChange={handleEditorChange}  className='bg-card h-[500px] mb-20'/>
+      <Button onClick={handleSave}>Save</Button>
+      
     </div>
   );
 };
@@ -54,6 +52,11 @@ const RichTextEditor: React.FC = () => {
 export default RichTextEditor;
 
 /*
+
+<div>
+        <h3>Markdown Output:</h3>
+        <pre>{markdownContent}</pre>
+      </div>
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";

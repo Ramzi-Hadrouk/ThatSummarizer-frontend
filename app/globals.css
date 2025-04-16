@@ -10,12 +10,12 @@
  /*--background:75 77% 95%;*/
  --color: #e7e8e6;
 
- background-color: #f4fdef;
+ background-color:#fafafa;
   background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
       linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
   background-size: 55px 55px;
     --foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
+    --card: 195  33% 99%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
@@ -38,8 +38,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --sidebar-background:
-    0 0% 98.5%;
+    --sidebar-background:0  0%, 100% ;
     --sidebar-foreground:240 5.3% 26.1%;
     --sidebar-primary:240 5.9% 10%;
     --sidebar-primary-foreground:0 0% 98%;

@@ -15,13 +15,14 @@ interface YouTubePlayerProps {
 export function YouTubePlayer({
   video_Id,
   width = undefined ,
-  height =200 ,
+  height = undefined,
   className,
   playlabel = "Play video",
   params,
 }: YouTubePlayerProps) {
   return (
-    <div className={cn(" w-full overflow-hidden rounded-xl border-4 border-red-500 bg-yellow-300 h-56", className)}>
+    <span className={cn(` rounded-xl  overflow-hidden `, className)}>
+        
       <YouTubeEmbed
        videoid={video_Id}
         height={height} 
@@ -30,6 +31,7 @@ export function YouTubePlayer({
         params={params} 
       
         />
-    </div>
+     
+    </span>
   )
 }
