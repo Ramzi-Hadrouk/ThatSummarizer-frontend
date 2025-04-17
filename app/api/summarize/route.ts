@@ -101,9 +101,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
 
     // Generate summary with content validation
-    let summaryResponse: string;
+    let summaryResponse ;
     try {
-      summaryResponse = await geminiGenerateSummary(transcriptResponseData);
+      summaryResponse =  await geminiGenerateSummary(transcriptResponseData) ;
       if (!summaryResponse?.trim()) {
         return createErrorResponse("Empty summary generated", 500);
       }
@@ -116,14 +116,20 @@ export async function POST(req: NextRequest): Promise<Response> {
       });
       return createErrorResponse("Summary generation failed", 500);
     }
-
+    
+    print({
+      location: "summary-route/summary-generation",
+      type: LogType.Success,
+      mss: "  Summary generrated  ",
+      data:  JSON.parse(summaryResponse).title
+    });
     // Construct summary payload
-    const title = extractTitleLine(summaryResponse);
-    const description = extractDescription(summaryResponse)
+    const title = JSON.parse(summaryResponse).title;
+    const description = JSON.parse(summaryResponse).description ;
     const summaryObject :summaryData= {
       video_id: videoId,
       title: title?.trim() || "Untitled Video",
-      summary: summaryResponse.trim(),
+      summary: JSON.parse(summaryResponse).summary,
       description:description|| "No description "
     };
 

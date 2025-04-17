@@ -1,51 +1,78 @@
 'use server '
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+import { GoogleGenerativeAI, GenerationConfig } from "@google/generative-ai"; // Import the main library and types
+ import { cleanJsonCodeBlock } from "./cleanJsonCodeBlock";
+// Ensure the API key is loaded from environment variables for security
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("GEMINI_API_KEY environment variable is not set."); // Crucial for authentication
+}
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash", // Updated to current model name
-  systemInstruction: `For the given text, complete the following tasks: 
-  1. Generate a Title: Create a compelling and relevant title based on the content.  
-  1. Generate a introduction: Create a compelling and relevant introduction based on the content.  
-  2. Summarize the Content: Write a first-person summary in a natural tone, highlighting five key topics.  
-  3. Write a YouTube Video Description:
-    - Structure it with headings and sections.  
-    - Include relevant keywords and key takeaways.  
-  4. Generate a Bullet List: Outline key points and benefits concisely.  
-  5. Suggest Optimal Keywords: Provide a list of the best recommended keywords for visibility and engagement. 
-  
-  important note : dont let empty lines between titles and contents 
-  `
-  
-,
-});
+// Initialize the Google Generative AI client with the API key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const generationConfig = {
-  temperature: 0.7, // Adjusted to safer value
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
+// --- Configuration ---
+const modelName = 'gemini-2.0-flash-lite'; // Specify the Gemini model to use
+
+// Define settings for content generation
+const generationConfig: GenerationConfig = {
+  temperature: 1,
+  responseMimeType: 'text/plain', // Expecting plain text containing the JSON string
 };
 
-export async function geminiGenerateSummary(inputText: string) {
+// Get an instance of the specified generative model
+const model = genAI.getGenerativeModel({
+    model: modelName,
+    // System instructions (persona, general rules) can be set here if needed
+});
 
-  const result = await model.generateContent({
-    contents: [{ role: "user", parts: [{ text: inputText }] }],
-    generationConfig,
-  });
-  return result.response.text();
+
+/**
+ * Generates a JSON summary from YouTube transcript text using the Gemini API.
+ * @param transcriptText - The input transcript string.
+ * @returns A promise resolving to a string (expected to be JSON).
+ * @throws {Error} If API call fails or API key is missing.
+ */
+export async function geminiGenerateSummary(transcriptText: string): Promise<string> {
+
+  // Construct the detailed prompt for the AI model
+  const prompt = `Summarize the following YouTube video transcript. Return a JSON object in this format:
+
+{
+"title": "string",
+"description": "string",
+"summary": " string (of valid HTML)",
+"category": "string"
 }
-/*
-async function example() {
-  const myText = "Your input text here";
+
+The summary should use Markdown formatting, including bullet points, headings, or emphasis when useful. Do not include any explanation, only the JSON object.
+
+Transcript:
+${transcriptText}`; // Insert the provided transcript into the prompt
+
   try {
-    const response = await generateResponse(myText);
-    console.log(response);
+    // Call the Gemini API to generate content based on the prompt and config
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }], // Define the user's input
+      generationConfig, // Apply the generation settings (temperature, mimeType)
+    });
+
+    // Extract the text content from the API's response
+    let responseText = result.response.text();
+      responseText  =cleanJsonCodeBlock(responseText)
+    // Simple check if the response looks like a JSON object
+    
+    if (responseText.trim().startsWith('{') && responseText.trim().endsWith('}')) {
+        return responseText; // Return the string if it seems like JSON
+    } else {
+        // Warn if the response doesn't strictly look like JSON, but return it anyway
+        console.warn("Gemini response did not strictly start/end with JSON braces. Returning raw response anyway:", responseText);
+        return responseText;
+    }
+
   } catch (error) {
-    console.error("Error:", error);
+    // Handle potential errors during the API call
+    console.error("Error calling Gemini API:", error);
+    // Rethrow a more specific error for the caller
+    throw new Error(`Gemini API call failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
-
-example();
-*/

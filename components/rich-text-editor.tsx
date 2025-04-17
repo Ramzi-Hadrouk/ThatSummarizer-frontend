@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useConverters } from '../hooks/useConverters';
@@ -34,7 +35,7 @@ const RichTextEditor: React.FC = () => {
   if (error) return <div>Error: {error}. Please refresh the page.</div>;
 
   return (
-    <div className="w-full h-fit">
+    <div className="w-full h-fit   ">
       <style>{`
         .ql-editor {
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,8 +43,9 @@ const RichTextEditor: React.FC = () => {
           min-height: 200px;
         }
       `}</style>
-      <ReactQuill value={htmlContent} onChange={handleEditorChange}  className='bg-card h-[500px] mb-20'/>
-      <Button onClick={handleSave}>Save</Button>
+      <ReactQuill value={htmlContent} onChange={handleEditorChange}  className='bg-card h-[501px] text-card-foreground  '
+      />
+      <Button onClick={handleSave} className='w-full mx-auto' variant={'outline'}>Save</Button>
       
     </div>
   );
