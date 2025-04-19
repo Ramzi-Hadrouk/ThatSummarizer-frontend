@@ -192,7 +192,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   )
 }
 
-export function RichTextEditor({ initialContent = "", onChange, className }: RichTextEditorProps) {
+export function NewRichTextEditor({ initialContent = "", onChange, className }: RichTextEditorProps) {
   const [isMounted, setIsMounted] = useState(false)
 
   const editor = useEditor({

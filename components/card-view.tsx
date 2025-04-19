@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
 interface DataItem {
   id: number
@@ -10,7 +11,8 @@ interface DataItem {
     title: string
     description: string
     date: string,
-    video_id: string
+    video_id: string ,
+    category : string 
   }
 }
 
@@ -31,6 +33,7 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
             <CardHeader>
               <CardTitle className="flex justify-between text-md sm:text-xl font-medium items-start">
                 <span>{item.attributes?.title}</span>
+                <Badge variant="secondary">{item.attributes?.category}</Badge>
               </CardTitle>
             </CardHeader>
 
@@ -44,7 +47,7 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
 
             <CardFooter>
               <Button className="w-fit justify-self-end p-0" variant="outline">
-                <Link href={`dashboard/summary/${item.attributes?.video_id}`} className='p-3 rounded-md'>
+                <Link href={`dashboard/summary/${item.attributes?.video_id}`} className='p-3'>
                   Read More
                 </Link>
               </Button>

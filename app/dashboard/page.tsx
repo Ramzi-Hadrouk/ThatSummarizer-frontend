@@ -12,10 +12,11 @@ import { PaginationDemo } from '@/components/Pagination-demo';
 interface DataItem {
   id: number
   attributes: {
-    title: string
-    description: string
+    title: string,
+    description: string,
     date: string,
-    video_id: string
+    video_id: string ,
+    category:string
   }
 }
 interface metaDataType {
