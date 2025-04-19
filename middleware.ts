@@ -11,7 +11,10 @@ export const config = {
 export async function   middleware(request: NextRequest) {
    
   const jwt =  cookies().get('jwt')?.value
-  if (jwt?.length==0) {
+  if (jwt===undefined) {
+    console.warn('JWT not found, redirecting to login');
+    return NextResponse.redirect(new URL('/login', request.url));
+  } else if (jwt?.length<10) {
     console.warn('JWT not found, redirecting to login');
     return NextResponse.redirect(new URL('/login', request.url));
   }

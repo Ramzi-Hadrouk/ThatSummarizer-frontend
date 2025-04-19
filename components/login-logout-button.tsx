@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { LogOut } from 'lucide-react';
+import logout from '@/auth-logic/logout/logout';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,9 +33,10 @@ export default function LoginLogoutButton() {
     }
   }); 
 
-  const handleLogout = () => {
+    async  function  handleLogout  ()   {
     Cookies.remove('that_summarizer_logged_state');
     setIsLoggedIn(false);
+    await logout();
     console.log('checkLoginStatus : False');
   };
 

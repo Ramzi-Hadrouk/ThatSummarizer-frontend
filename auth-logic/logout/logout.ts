@@ -1,8 +1,7 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-function logout() {
-    cookies().delete("jwt")
-    redirect("/");
-}
-
-export default logout
+// utils/logout.ts
+export default async function logout(): Promise<void> {
+    await fetch('/api/logout', {
+      method: 'POST',
+    });
+  }
+  
