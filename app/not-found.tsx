@@ -1,26 +1,42 @@
-import Link from 'next/link'
-import { headers } from 'next/headers'
-import { House } from 'lucide-react';
+import Link from 'next/link';
+import { headers } from 'next/headers';
+import { House } from 'lucide-react'; // Assuming lucide-react is installed
+import Image from 'next/image';
+
+export const metadata = {
+  title: '404 - Page Not Found',
+  description: 'Sorry, the page you are looking for does not exist.',
+};
 
 export default async function NotFound() {
-    const headersList = await headers()
-    const domain = headersList.get('host')
+ return (
+    <div className="flex min-h-screen flex-col items-center  justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-md text-center">
+        {/* Improved Image handling with a placeholder background */}
+        <div className="mx-auto mb-8 w-fit h-fit items-center justify-center">
+           <Image
+            src="/avatars/not-found-avatar.png"
+            alt="Page Not Found" // More descriptive alt text
+            width={250}
+            height={250}
+            className="object-cover" // Style to cover the container
+          />
+        </div>
 
-    return (
+  
 
-        <section className="grid place-content-center   h-[100vh]">
+        <p className="mb-8 text-lg font-medium text-gray-600">
+          Sorry, we can't find the page you're looking for. It might have been moved or deleted.
+        </p>
 
-            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-center   ">404</h1>
-            <p className="mb-4 text-3xl tracking-tight font-bold  md:text-4xl  text-center">Something's missing.</p>
-            <p className="mb-4 text-lg font-light  text-center ">Sorry, we can't find that page. You'll find lots to explore on the home page. </p>
-
-            <Link href="/" className=' grid grid-flow-col gap-x-4 w-fit  justify-self-center bg-primary text-primary-foreground hover:bg-yellow-300 p-4 font-bold  rounded-md'>
-                <House />
-                <span>Back to Home page</span>
-            </Link>
-
-        </section>
-
-
-    )
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-4 text-base font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
+          <House className="mr-3 h-5 w-5" /> {/* Added margin for spacing */}
+          Back to Home
+        </Link>
+      </div>
+    </div>
+  );
 }
