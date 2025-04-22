@@ -6,7 +6,7 @@ import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
 import { useEffect, useState } from "react";
 import { htmlToMarkdown } from "@/utils/functions/html-to-markdown";
 import { markdownToHtml } from "@/utils/functions/markdown-to-html";
-
+import UpdateSummaryButton from "@/components/update-summary-button";
 // types for data fetching 
 interface DataItem {
   id: number
@@ -59,14 +59,15 @@ export default function Page({ params }: { params: { video_id: string } }) {
 
   return (
     <main className="lg:px-8 md:w-[calc(w-full-16em)] bg-sidebar h-full p-6 rounded-lg shadow-md">
-    
+
       <div className="grid grid-cols-10 gap-3 py-4">
-        <div className="col-span-10 lg:col-span-7">
+        <div className="col-span-10 lg:col-span-7 grid">
           <NewRichTextEditor
             initialContent={initialHtml}
             onChange={(html) => setCurrentMarkdown(htmlToMarkdown(html))}
             className="prose max-w-none border border-gray-200 rounded-md shadow-sm"
           />
+         <UpdateSummaryButton  summary_id={fitchedData?.id} summary={currentMarkdown} / > 
         </div>
         <div className="col-span-3 hidden lg:inline justify-center">
           <YouTubePlayer video_Id={video_id} title={fitchedData?.attributes?.title || ''} className="justify-self-center" />

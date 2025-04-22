@@ -323,7 +323,6 @@ import {
   AlignJustify,
   Palette,
   Printer,
-  Save,
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
@@ -589,12 +588,7 @@ export function NewRichTextEditor({ initialContent = "", onChange, className }: 
     "[&_ol]:list-decimal [&_ul]:list-disc [&_li]:ml-6"
   );
 
-  // Function to log HTML to console
-  const logHtmlToConsole = () => {
-    if (editor) {
-      console.log(editor.getHTML());
-    }
-  };
+  
 
 
   if (!isMounted) {
@@ -610,15 +604,7 @@ export function NewRichTextEditor({ initialContent = "", onChange, className }: 
       />
       {/* Button to print pure text (HTML) to console */}
       <div  className="grid justify-center bg-sidebar">
-      <Button
-        
-        size="sm"
-        onClick={logHtmlToConsole}
-        className="mt-2    text-xl" // Add some margin top
-      >
-        <Save />
-       <span className="mx-2">Save</span> 
-      </Button>
+    
       </div>
     </div>
   )

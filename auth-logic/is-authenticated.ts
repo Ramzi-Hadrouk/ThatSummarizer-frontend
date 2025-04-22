@@ -37,4 +37,4 @@ async function isAuthenticated(jwt: string | undefined) {
   }
 
 }
-export default isAuthenticated
+export default isAuthenticated ;
