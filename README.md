@@ -21,8 +21,7 @@
    - [Running the App](#running-the-app)
 5. [Usage](#usage)
 6. [Contributing](#contributing)
-7. [License](#license)
-8. [Contact](#contact)
+7. [Contact](#contact)
 
 ---
 
@@ -133,10 +132,7 @@ Visit `http://localhost:3000` to explore **That Summarizer**.
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request with clear descriptions of your changes.
 
----
 
-## License
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
