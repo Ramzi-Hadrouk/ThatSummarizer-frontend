@@ -14,12 +14,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-
+import { deleteSummary } from "@/utils/functions/delete-summary";
 interface DeleteButtonProps {
-  video_id: string;
+  SummaryId: number;
 }
 
-export default function DeleteSummaryButton({ video_id }: DeleteButtonProps) {
+export default function DeleteSummaryButton({ SummaryId }: DeleteButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -27,12 +27,7 @@ export default function DeleteSummaryButton({ video_id }: DeleteButtonProps) {
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.BASE_URL || "http://localhost:1337"}/api/summaries?filters[video_id][$eq]=${video_id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await deleteSummary(SummaryId)
 
       if (!response.ok) {
         throw new Error("Failed to delete summary");
@@ -41,6 +36,7 @@ export default function DeleteSummaryButton({ video_id }: DeleteButtonProps) {
       toast({
         title: "Success",
         description: "Summary deleted successfully.",
+        variant:'success',
       });
       setIsDialogOpen(false);
     } catch (error) {
@@ -62,18 +58,19 @@ export default function DeleteSummaryButton({ video_id }: DeleteButtonProps) {
         size="sm"
         onClick={() => setIsDialogOpen(true)}
         disabled={isLoading}
+        className="w-fit  "
       >
-        <Trash2 className="h-4 w-4 mr-2" />
-        Delete
+        <Trash2  size={18} />
+        
       </Button>
 
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
+      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} >
+        <AlertDialogContent className="bg-popover">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              summary for video ID: {video_id}.
+              summary for video ID: {SummaryId}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

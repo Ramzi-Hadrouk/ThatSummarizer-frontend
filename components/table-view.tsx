@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import DeleteSummaryButton from './delete-summary-button'; 
 
 interface DataItem {
   id: number
@@ -47,14 +48,15 @@ export default function TableView({ data = [] }: { data?: DataItem[] }) {
               {/* Correctly place Category data cell with its existing hidden md class */}
               <TableCell className="hidden md:table-cell font-bold text-xs"> {item.attributes.category} </TableCell> {/* Existing classes and responsiveness */}
               {/* Action cell - always visible, original classes (none specified on cell) */}
-              <TableCell>
-                <Button className="w-fit justify-self-end p-1" variant="outline">
+              <TableCell className=" justify-self-end p-1 grid grid-cols-[auto_auto] justify-end gap-2 ">
+                <Button    variant="outline">
                   <Link href={`dashboard/summary/${item.attributes?.video_id}`}>
 
                     Read More
 
                   </Link>
                 </Button >
+                <DeleteSummaryButton SummaryId={item.id}/>
               </TableCell>
             </TableRow>
           ))}

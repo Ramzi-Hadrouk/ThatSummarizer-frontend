@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-
+import DeleteSummaryButton from './delete-summary-button'; 
 interface DataItem {
   id: number
   attributes: {
@@ -45,12 +45,14 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
               </div>
             </CardContent>
 
-            <CardFooter>
-              <Button className="w-fit justify-self-end p-0" variant="outline">
+            <CardFooter className='grid grid-cols-[auto_auto] justify-end gap-2 w-full'>
+              <Button className="w-fit  -end" variant="outline">
                 <Link href={`dashboard/summary/${item.attributes?.video_id}`} className='p-3'>
                   Read More
                 </Link>
+
               </Button>
+              <DeleteSummaryButton SummaryId={item.id}/>
             </CardFooter>
           </Card>
         ))}
