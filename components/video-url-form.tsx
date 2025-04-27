@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch";
 import { validateYouTubeUrl } from "@/utils/functions/validate-youtube-url";
 import { useToast } from "@/hooks/use-toast";
-import { ZodError } from "zod";
+import { set, ZodError } from "zod";
  import LoadingItem from "@/components/loading-Item";
 type SummaryResponse = {
   success: boolean;
@@ -14,8 +14,12 @@ type SummaryResponse = {
   data?: string;
   error?: string;
 };
+interface CardViewProps {
+  currentstate:number,
+  setCurrentstate: (number: number) => void;
+}
 
-export default function VideoUrlForm() {
+export default function VideoUrlForm({currentstate, setCurrentstate }: CardViewProps) {
   const [videoUrl, setVideoUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -65,8 +69,9 @@ export default function VideoUrlForm() {
           description: "Summary generated successfully",
           variant:'success',
         });
+
       }
-        console.log("Generated Summary:", data.data);
+      setCurrentstate(currentstate+1)
 
       } catch (error) {
         let title = "Error";

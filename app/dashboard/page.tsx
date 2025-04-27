@@ -67,7 +67,7 @@ function page() {
 
   return (
     <main >
-      <VideoUrlForm />
+      <VideoUrlForm currentstate={currentstate} setCurrentstate={setCurrentstate} />
       <main >
         <ViewToggle view={view} setView={setView} />
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
