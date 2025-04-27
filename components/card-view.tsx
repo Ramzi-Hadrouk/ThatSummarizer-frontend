@@ -23,7 +23,13 @@ function getFirstTwoLines(text: string): string {
   return first25.join(' ');
 }
 
-export default function CardView({ data = [] }: { data?: DataItem[] }) {
+interface CardViewProps {
+  data?: DataItem[];
+  currentstate:number,
+  setCurrentstate: (number: number) => void;
+}
+
+export default function CardView({ data = [],currentstate, setCurrentstate }: CardViewProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
@@ -52,11 +58,11 @@ export default function CardView({ data = [] }: { data?: DataItem[] }) {
                 </Link>
 
               </Button>
-              <DeleteSummaryButton SummaryId={item.id}/>
+              <DeleteSummaryButton SummaryId={item.id} currentstate={currentstate} setCurrentstate={setCurrentstate} />
             </CardFooter>
           </Card>
         ))}
-
+         
     </div>
   )
 }

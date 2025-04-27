@@ -78,7 +78,7 @@ function Login() {
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
                                 <Input
-                                    type="txt"
+                                    type="password"
                                     id="password"
                                     placeholder="Password"
                                     name="password"

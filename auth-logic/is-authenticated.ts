@@ -38,3 +38,24 @@ async function isAuthenticated(jwt: string | undefined) {
 
 }
 export default isAuthenticated ;
+
+
+
+
+/**
+ * resonse example
+ * 
+ * {
+ * "id":29,
+ * "username":"Ramzi_Hadrouk",
+ * "email":"ramziramzi@gmail.com",
+ * "provider":"local",
+ * "confirmed":true,
+ * "blocked":false,
+ * "createdAt":"2025-04-25T20:53:16.923Z",
+ * "updatedAt":"2025-04-25T20:53:16.923Z",
+ * "bio":null,
+ * "firstname":null,
+ * "lastname":null
+ * }
+ */

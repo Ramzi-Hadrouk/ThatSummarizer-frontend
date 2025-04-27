@@ -7,7 +7,7 @@ import ViewToggle from "@/components/view-toggel"
 import { enhancedFetch, ResponseType } from "@/utils/functions/enhanced-fetch"
 import { useEffect, useState } from "react"
 import { PaginationDemo } from '@/components/Pagination-demo';
-
+import { getSummaries } from '@/utils/functions/get-summaries';
 // types for data fetching 
 interface DataItem {
   id: number
@@ -15,8 +15,8 @@ interface DataItem {
     title: string,
     description: string,
     date: string,
-    video_id: string ,
-    category:string
+    video_id: string,
+    category: string
   }
 }
 interface metaDataType {
@@ -35,28 +35,26 @@ function page() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [currentstate, setCurrentstate] = useState(0)
   const [view, setView] = useState<"card" | "table">("card")
-  
+
+
 
   let TOTAL_PAGES: number = metaData?.pagination?.pageCount || 1;
 
-  const handlePageChange = (page: number) => { setCurrentPage(page) }
+  const handlePageChange = (page: number) => {
+    if (page <= TOTAL_PAGES && page >= 1)
+      setCurrentPage(page)
+  }
   //usefect for just fetch summaries from strapi backend 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const summary: { data: DataItem[], meta: metaDataType } = await enhancedFetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:1337"}/api/summaries/?pagination[page]=${currentPage}&pagination[pageSize]=6&sort[0]=createdAt:desc`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            timeout: 20000,
-          },
-          ResponseType.JSON
-        )
+        const summary: { data: DataItem[], meta: metaDataType } = await getSummaries(currentPage)
+
         setData(summary.data)
         setMetaData(summary.meta)
-        TOTAL_PAGES = metaData?.pagination?.pageCount  || 1
+        TOTAL_PAGES = metaData?.pagination?.pageCount || 1
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
@@ -65,27 +63,32 @@ function page() {
     }
 
     fetchData()
-  }, [currentPage])
- 
+  }, [currentPage, currentstate])
+
   return (
     <main >
-      <VideoUrlForm/>
+      <VideoUrlForm />
       <main >
         <ViewToggle view={view} setView={setView} />
         <div className="bg-sidebar p-6 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Summaries</h1>
           {loading && <LoadingItem fontSize="text-2xl" />}
           {error && <div>Error: {error}</div>}
-          {view === "card" ? <CardView data={data} /> : <TableView data={data}/>}
-        <PaginationDemo
-          currentPage={currentPage}
-          totalPages={TOTAL_PAGES}
-          onPageChange={handlePageChange}
-        />
+          {
+            view === "card" ?
+              <CardView data={data} currentstate={currentstate} setCurrentstate={setCurrentstate} />
+              :
+              <TableView data={data} currentstate={currentstate} setCurrentstate={setCurrentstate} />
+          }
+          <PaginationDemo
+            currentPage={currentPage}
+            totalPages={TOTAL_PAGES}
+            onPageChange={handlePageChange}
+          />
         </div>
       </main>
 
-     
+
     </main>
 
   )

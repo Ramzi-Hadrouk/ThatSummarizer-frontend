@@ -36,7 +36,7 @@ export default function UpdateSummaryButton({ className = "", summary_id, summar
   return (
     <Button
       size="sm"
-      className={cn("mt-2 justify-self-center text-xl", className)}
+      className={cn("mt-2 justify-self-center bg-yellow-300 hover:bg-yellow-400 text-xl", className)}
       onClick={handleClick}
     >
       <Save />

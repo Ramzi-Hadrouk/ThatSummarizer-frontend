@@ -12,14 +12,16 @@ import { handleUnexpectedError } from "./functions/handleUnexpectedError";
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     const requestData = await parseAndValidateRequest(req);
+   
     if (!('videoId' in requestData)) {
       return requestData as Response; // This is an error response
     }
 
     const  videoId :string = requestData.videoId;
-    
     // Check if summary already exists
     const existingSummary = await checkExistingSummary(videoId);
+
+
     if (existingSummary) {
       return existingSummary;
     }

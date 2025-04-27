@@ -7,6 +7,7 @@ import { getCurrentDate } from "./get-current-date";
     summary: string;
     description: string;
     date?: string ;
+  
   }
  
  export  async function sendSummaryToBackend(summaryData:summaryData ) {
@@ -22,8 +23,10 @@ import { getCurrentDate } from "./get-current-date";
   
     const requestBody = {
       data: summaryData,
+
     };
-  
+     console.log('requestbody-----------')
+     console.log(requestBody)
     try {
       const response = await fetch(BackendApiEndPoint, {
         method: "POST",

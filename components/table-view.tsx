@@ -20,8 +20,12 @@ function getFirstTwoLines(text: string): string {
   const first25 = words.slice(0, 18);
   return first25.join(' ') + " . . .";
 }
-
-export default function TableView({ data = [] }: { data?: DataItem[] }) {
+interface CardViewProps {
+  data?: DataItem[];
+  currentstate:number,
+  setCurrentstate: (number: number) => void;
+}
+export default function TableView({ data = [],currentstate, setCurrentstate }: CardViewProps) {
   return (
     <div className="mb-6 overflow-x-auto w-full"> {/* Existing responsive container */}
       <Table className="min-w-full"> {/* Existing table classes */}
@@ -56,7 +60,7 @@ export default function TableView({ data = [] }: { data?: DataItem[] }) {
 
                   </Link>
                 </Button >
-                <DeleteSummaryButton SummaryId={item.id}/>
+                <DeleteSummaryButton SummaryId={item.id} currentstate={currentstate} setCurrentstate={setCurrentstate}/>
               </TableCell>
             </TableRow>
           ))}

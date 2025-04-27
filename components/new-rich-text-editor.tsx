@@ -348,7 +348,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const handlePrint = () => {
     if (editor) {
       const editorContent = editor.getHTML();
-      const printWindow = window.open('', '', 'height=600,width=800');
+      const printWindow = window.open('', '', '');
       if (printWindow) {
         printWindow.document.write('<html><head><title>Print Editor Content</title>');
         // Optionally include some basic styling for printing
@@ -367,6 +367,8 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         printWindow.document.write('</head><body>');
         printWindow.document.write(editorContent);
         printWindow.document.write('</body></html>');
+ 
+
         printWindow.document.close();
         printWindow.print();
       }
@@ -580,7 +582,7 @@ export function NewRichTextEditor({ initialContent = "", onChange, className }: 
   }, [editor, initialContent])
 
   const editorContentClassNames = cn(
-    "prose prose-sm max-w-none p-2 min-h-[400px]  bg-card focus-within:outline-none dark:bg-black-400",
+    "prose prose-sm max-w-none p-2 min-h-[600px]  bg-card focus-within:outline-none dark:bg-black-400",
     // Explicitly adding styles for headings, paragraphs, and lists
     // using more specific selectors to potentially override prose defaults
     // depending on your CSS setup.

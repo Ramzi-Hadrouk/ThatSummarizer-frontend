@@ -17,9 +17,12 @@ import { useToast } from "@/hooks/use-toast";
 import { deleteSummary } from "@/utils/functions/delete-summary";
 interface DeleteButtonProps {
   SummaryId: number;
+  currentstate:number;
+  setCurrentstate: (number: number) => void;
 }
 
-export default function DeleteSummaryButton({ SummaryId }: DeleteButtonProps) {
+
+export default function DeleteSummaryButton({ SummaryId ,currentstate,setCurrentstate }: DeleteButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -49,6 +52,7 @@ export default function DeleteSummaryButton({ SummaryId }: DeleteButtonProps) {
     } finally {
       setIsLoading(false);
     }
+    setCurrentstate(currentstate+1);
   };
 
   return (
