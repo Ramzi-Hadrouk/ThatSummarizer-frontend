@@ -17,8 +17,8 @@ export default async function Home() {
   const { title, description } = data.data?.attributes;
 
   return (
-    <>
+    <main className="h-svh">
      {data.data?.attributes?.blocks.map(( block: Block) => blockRenderer(block))}
-     </>
+     </ main>
   );
 }

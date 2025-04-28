@@ -27,9 +27,9 @@ function getIcon(name: string) {
 //---------Component Function :
 function FeatureSection({ data }: { data: FeaturesSection }) {
     return (
-        <div className=" grid my-5  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  ">
+        <div className=" grid my-5  md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-3  p-5 gap-5  justify-center  ">
             {data?.features?.map((feature: FeatureItem) => (
-                <Card key={feature.id} className="  shadow-lg border  ">
+                <Card key={feature.id} className=" py-5 shadow-lg border  ">
                     <CardHeader>
                         <CardTitle className=" grid  grid-flow-col justify-start   ">
 
@@ -39,12 +39,11 @@ function FeatureSection({ data }: { data: FeaturesSection }) {
                         </CardTitle>
                         <CardDescription>{feature.heading}</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <p>{feature.subheading}</p>
+                    <CardContent  className="pb-6 px-5">
+                        <p >{feature.subheading}</p>
                     </CardContent>
-                    <CardFooter>
 
-                    </CardFooter>
+
                 </Card>
             ))}
 
